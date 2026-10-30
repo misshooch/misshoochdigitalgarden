@@ -151,8 +151,11 @@
 
   function fxWord(img) {
     var alt = (img.getAttribute("alt") || "").trim().toLowerCase();
-    var word = alt.split(/[\s|,]+/)[0];
-    return FX_MODES[word] ? word : null;
+    // Obsidian publishes ![[photo.jpg|halftone]] with the alt text "photo.jpg|halftone",
+    // so look for the effect word anywhere after the file name, last one wins.
+    var parts = alt.split(/[\s|,]+/);
+    for (var i = parts.length - 1; i >= 0; i--) if (FX_MODES[parts[i]]) return parts[i];
+    return null;
   }
 
   function applyFx(img, word) {
