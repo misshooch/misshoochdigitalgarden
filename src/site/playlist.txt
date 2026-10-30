@@ -1,0 +1,4 @@
+# Your playlist. One song per line:  Title|https://link-to-the-file.mp3
+# The link must go straight to the audio file. Lines starting with # are ignored.
+# Example:
+# Midnight Tide|https://pub-xxxxxxxx.r2.dev/midnight-tide.mp3

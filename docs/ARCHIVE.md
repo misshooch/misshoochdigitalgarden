@@ -55,3 +55,6 @@ In `src/plugins/plugins.json` (or the plugin settings screen if your Obsidian pl
 ## Photos and music (v1.2)
 - Photos: any image in a vault folder called `Photos` (published through a note that embeds it) appears on `/photos/` in every effect, and the first one becomes the homepage portrait. Click the portrait to cycle through them. With none, the portrait and photos page stay empty. To use a fixed portrait instead, set the `portrait` plugin setting.
 - Music: put audio files (mp3, m4a, ogg, wav) in `src/site/img/music/`. They join the player's playlist automatically, titled by file name. Links in the `playlist` setting (`Title|url; Title|url`) are added first.
+
+## Playlist file (v1.3)
+Edit `src/site/playlist.txt`, one song per line as `Title|https://link.mp3`. Lines starting with `#` are ignored. These join the `playlist` setting and any files in `src/site/img/music/`.
