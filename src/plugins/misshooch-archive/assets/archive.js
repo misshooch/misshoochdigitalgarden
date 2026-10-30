@@ -153,7 +153,7 @@
     var alt = (img.getAttribute("alt") || "").trim().toLowerCase();
     // Obsidian publishes ![[photo.jpg|halftone]] with the alt text "photo.jpg|halftone",
     // so look for the effect word anywhere after the file name, last one wins.
-    var parts = alt.split(/[\s|,]+/);
+    var parts = alt.replace(/&#124;|&vert;/g, "|").split(/[\s|,\\]+/);
     for (var i = parts.length - 1; i >= 0; i--) if (FX_MODES[parts[i]]) return parts[i];
     return null;
   }
@@ -200,14 +200,14 @@
       entries.forEach(function (en) {
         if (!en.isIntersecting) return;
         io.unobserve(en.target);
-        var img = en.target.tagName === "PICTURE" ? $("img", en.target) : en.target, word = img && fxWord(img);
+        var img = en.target, word = fxWord(img);
         if (!img || !word) return;
         safe("photo effect", function () { applyFx(img, word); });
       });
     }, { rootMargin: "300px" }) : null;
     imgs.forEach(function (img) {
       var go = function () {
-        if (io) io.observe(img.closest("picture") || img);
+        if (io) io.observe(img);
         else safe("photo effect", function () { applyFx(img, fxWord(img)); });
       };
       if (img.complete && img.naturalWidth) go(); else img.addEventListener("load", go, { once: true });
@@ -462,9 +462,10 @@
     }
   }
 
+  function win_load(fn) { if (doc.readyState === "complete") fn(); else window.addEventListener("load", fn, { once: true }); }
   function start() {
     safe("skin", setupSkin); safe("clock", setupClock); safe("misc", setupMisc); safe("boot", setupBoot);
-    safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("skin images", setupSkinFx); safe("photo effects", setupFx);
+    safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("skin images", setupSkinFx); safe("photo effects", setupFx); win_load(function () { safe("photo effects", setupFx); });
   }
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
 })();
