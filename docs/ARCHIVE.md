@@ -7,7 +7,7 @@ The redesign is one plugin, `src/plugins/misshooch-archive/`, plus two small cha
 | File | What it does |
 |---|---|
 | `src/plugins/misshooch-archive/styles/archive.css` | Both skins, home page, callouts, status bar, photo frames |
-| `src/plugins/misshooch-archive/assets/archive-r4.js` | Skin switch, photo effects, marginalia, music player |
+| `src/plugins/misshooch-archive/assets/archive-r5.js` | Skin switch, photo effects, marginalia, music player |
 | `src/plugins/misshooch-archive/templates/` | Homepage section, status bar, nav buttons, related notes |
 | `src/site/a-z.njk` and `a-z.11tydata.js` | The alphabetical index at `/a-z/` |
 | `src/helpers/azGroups.js` | Groups note titles by letter |
@@ -63,3 +63,6 @@ Edit `src/site/playlist.txt`, one song per line as `Title|https://link.mp3`. Lin
 - Same-site photos: upload to `src/site/img/photos/` on GitHub. Put the effect before the extension, e.g. `beach.halftone.jpg` (halftone, phosphor, cyber, pixel, code). No effect = shown in every effect.
 - Hosted photos: add a line to `src/site/photos.txt`: `https://link.jpg | effect | caption`. The host needs a CORS rule allowing GET from `*` for effects to work.
 - The first same-site photo becomes the homepage portrait.
+
+## Photos page (v1.5)
+`/photos/` shows one tile for every image Obsidian has uploaded (plus `src/site/img/photos/` and `src/site/photos.txt`). Each starts unaffected; click it to cycle through the effects.

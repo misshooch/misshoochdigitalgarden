@@ -466,9 +466,44 @@
   }
 
   function win_load(fn) { if (doc.readyState === "complete") fn(); else window.addEventListener("load", fn, { once: true }); }
+  /* Photos page: one tile per photograph; clicking cycles through the effects. */
+  function setupGallery() {
+    var MODES = ["orig", "halftone", "phosphor", "cyber", "pixel", "code"];
+    $$(".mh-gal-tile").forEach(function (tile) {
+      var img = $("img", tile), cap = $(".mh-gal-cap", tile); if (!img) return;
+      var host = img.closest("picture") || img, i = Math.max(0, MODES.indexOf(tile.getAttribute("data-start") || "orig"));
+      var cv = null, srcCanvas = null, busy = false;
+      function ready(cb) {
+        if (srcCanvas) return cb();
+        var from = img.currentSrc || img.src, remote = /^https?:/i.test(from) && from.indexOf(location.origin) !== 0;
+        var build = function (el) {
+          var nw = el.naturalWidth, nh = el.naturalHeight; if (!nw || !nh) return;
+          var sw = 300, sh = Math.max(1, Math.round(300 * nh / nw));
+          srcCanvas = doc.createElement("canvas"); srcCanvas.width = sw; srcCanvas.height = sh;
+          srcCanvas.getContext("2d", { willReadFrequently: true }).drawImage(el, 0, 0, sw, sh);
+          cv = doc.createElement("canvas"); var W = Math.max(240, Math.min(700, Math.round(tile.getBoundingClientRect().width || 320)));
+          cv.width = W; cv.height = Math.round(W * nh / nw); cv.setAttribute("role", "img"); cv.setAttribute("aria-label", "Photograph with effect");
+          cv.style.display = "none"; host.parentNode.insertBefore(cv, host); cb();
+        };
+        if (remote) { var c = new Image(); c.crossOrigin = "anonymous"; c.onload = function () { build(c); }; c.src = from; }
+        else if (img.complete && img.naturalWidth) build(img); else img.addEventListener("load", function () { build(img); }, { once: true });
+      }
+      function show() {
+        var mode = MODES[i];
+        if (cap) cap.textContent = mode === "orig" ? "as uploaded" : "|" + mode;
+        if (mode === "orig") { if (cv) cv.style.display = "none"; host.style.display = ""; return; }
+        ready(function () { host.style.display = "none"; cv.style.display = "block"; safe("gallery effect", function () { treat(cv, FX_NAME[mode] || mode, srcCanvas); }); });
+      }
+      function next() { i = (i + 1) % MODES.length; show(); }
+      tile.addEventListener("click", next);
+      tile.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); next(); } });
+      if (i > 0) show();
+    });
+  }
+
   function start() {
     safe("skin", setupSkin); safe("clock", setupClock); safe("misc", setupMisc); safe("boot", setupBoot);
-    safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("skin images", setupSkinFx); safe("photo effects", setupFx); win_load(function () { safe("photo effects", setupFx); });
+    safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("skin images", setupSkinFx); safe("photo effects", setupFx); win_load(function () { safe("photo effects", setupFx); }); safe("gallery", setupGallery);
   }
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
 })();

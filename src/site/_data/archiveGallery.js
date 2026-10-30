@@ -3,6 +3,7 @@ const path = require("path");
 
 // Photos for the /photos/ page and the homepage portrait. Three ways to add one,
 // all without touching code:
+//   0. Every image Obsidian uploads (src/site/img/user/) is included automatically.
 //   1. Put an image in src/site/img/photos/ (or any folder called "photos" under
 //      src/site/img, such as a vault folder "Photos" published from Obsidian).
 //      Add an effect by putting its word before the extension:
@@ -33,7 +34,7 @@ function walk(dir, inside, out) {
   for (const entry of entries) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      walk(full, inside || entry.name.toLowerCase() === "photos", out);
+      walk(full, inside || ["photos", "user"].includes(entry.name.toLowerCase()), out);
     } else if (inside && EXT.test(entry.name)) {
       const rel = path.relative(ROOT, full).split(path.sep).map(encodeURIComponent).join("/");
       const s = split(entry.name);
@@ -67,7 +68,13 @@ function fromTextFile() {
 }
 
 module.exports = function () {
-  const items = [...fromTextFile(), ...walk(ROOT, false, [])];
+  const seen = new Set();
+  const items = [...fromTextFile(), ...walk(ROOT, false, [])].filter((i) => {
+    const key = decodeURIComponent(i.src.split("/").pop()).toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   // The homepage portrait is redrawn in the browser, so it only uses photos on this site.
   const local = items.filter((i) => i.src.startsWith("/"));
   return { items, local, joined: local.map((i) => i.src).join("|") };

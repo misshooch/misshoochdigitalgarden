@@ -466,3 +466,10 @@ html[data-skin="cyber"] .mh-trk i{background:#19d3ff;color:#06163a}
   html body .navbar .search-button { margin: 4px 6px !important; }
   html body { padding-bottom: 52px; }
 }
+
+/* photos page: one tile per photograph */
+.mh-gal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 12px; }
+.mh-gal-tile { margin: 0; cursor: pointer; display: flex; flex-direction: column; gap: 4px; min-width: 0; -webkit-tap-highlight-color: transparent; }
+.mh-gal-tile img, .mh-gal-tile canvas { display: block; width: 100%; height: auto; border: 1px solid var(--mh-line); }
+.mh-gal-tile:hover img, .mh-gal-tile:hover canvas, .mh-gal-tile:focus-visible img, .mh-gal-tile:focus-visible canvas { border-color: var(--mh-accent); }
+html[data-skin="cyber"] .mh-gal-tile img, html[data-skin="cyber"] .mh-gal-tile canvas { border-radius: 10px; border: 2px solid #fff; outline: 1px solid #8fb0e6; }

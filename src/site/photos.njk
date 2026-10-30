@@ -2,26 +2,18 @@
 permalink: /photos/
 ---
 {% set photos = archiveGallery.items %}
-{% set effects = ["halftone", "phosphor", "cyber", "pixel", "code"] %}
 <div class="mh-gal">
   {% if photos.length %}
-  <p class="mh-gal-intro">Click any photograph to see the original underneath.</p>
+  <p class="mh-gal-intro">Every photograph, as uploaded. Click one to change its effect; keep clicking to cycle through them.</p>
+  <div class="mh-gal-grid">
   {% for p in photos %}
-    <section class="mh-gal-set">
-      <h2>{{ p.name }}</h2>
-      <div class="mh-gal-row">
-        <div class="mh-gal-cell"><img src="{{ p.src }}" alt="Photograph, as uploaded"><span class="mh-gal-cap">as uploaded</span></div>
-        {% if p.effect %}
-          <div class="mh-gal-cell"><img src="{{ p.src }}" alt="{{ p.effect }}"><span class="mh-gal-cap">|{{ p.effect }}</span></div>
-        {% else %}
-          {% for e in effects %}
-            <div class="mh-gal-cell"><img src="{{ p.src }}" alt="{{ e }}"><span class="mh-gal-cap">|{{ e }}</span></div>
-          {% endfor %}
-        {% endif %}
-      </div>
-    </section>
+    <figure class="mh-gal-tile" tabindex="0" role="button" data-start="{{ p.effect }}" aria-label="{{ p.name }}: click to change the effect">
+      <img src="{{ p.src }}" alt="Photograph, as uploaded">
+      <figcaption class="mh-gal-cap">as uploaded</figcaption>
+    </figure>
   {% endfor %}
+  </div>
   {% else %}
-  <p class="mh-gal-intro">No photographs yet. Add some in src/site/img/photos/ or list links in src/site/photos.txt.</p>
+  <p class="mh-gal-intro">No photographs yet. Upload some from Obsidian and they appear here.</p>
   {% endif %}
 </div>
