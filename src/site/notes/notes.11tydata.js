@@ -5,6 +5,7 @@ const { listHomePageNotes } = require("../../helpers/homePage");
 const { chooseHomePage } = require("../../helpers/homeChoice");
 const { pickNoteMetadata } = require("../../helpers/bases-engine/noteMetadata");
 const pluginLoader = require("../../helpers/pluginLoader");
+const { findDuplicateNotes } = require("../../helpers/duplicateNotes");
 
 // Core note settings plus any per-note flags declared by enabled plugins
 // (manifest "noteSettings"). Same resolution for both: per-note frontmatter
@@ -18,6 +19,15 @@ const allSettings = [
 // with the most text wins and the others fall back to their own permalinks, so
 // a stray second `dg-home` in Obsidian can no longer fail the build with two
 // templates writing dist/index.html.
+// Renamed or moved notes leave an old copy online. Say so in the build log.
+for (const group of findDuplicateNotes(__dirname)) {
+  console.warn(
+    "[duplicates] These notes have identical text; one is probably an old copy left behind by a rename or move: " +
+      group.map((f) => path.relative(__dirname, f)).join("  |  ") +
+      ". Remove the old one in Obsidian's Publication Center."
+  );
+}
+
 const homeCandidates = listHomePageNotes(__dirname);
 const homeNote = chooseHomePage(homeCandidates);
 if (homeCandidates.length > 1) {
