@@ -1,4 +1,10 @@
 ---
-{"dg-publish":true,"permalink":"/untitled/","tags":["gardenEntry"],"dg-note-properties":{}}
+---
+dg-publish: true
+permalink: /untitled/
+tags:
+  - gardenEntry
+dg-note-properties: {}
+---
 ---
 
