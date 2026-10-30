@@ -453,3 +453,16 @@ html[data-calm] .mh-trk{animation:none}
 html[data-skin="cyber"] .mh-trk{border-color:#19d3ff;box-shadow:0 0 8px rgba(25,211,255,.7)}
 html[data-skin="cyber"] .mh-trk::before,html[data-skin="cyber"] .mh-trk::after{border-color:#19d3ff}
 html[data-skin="cyber"] .mh-trk i{background:#19d3ff;color:#06163a}
+
+/* ---------- small screens: the header scrolls away instead of covering the page ---------- */
+@media (max-width: 1000px) {
+  html body .navbar { position: static !important; flex-wrap: wrap; height: auto; padding: 4px 12px; gap: 2px 8px; }
+  html body .navbar .navbar-inner h1 { font-size: 1.15rem !important; margin: 6px 0 !important; }
+  html body.has-navbar .content { margin-top: 0 !important; }
+  html body .empty-navbar { margin-bottom: 0 !important; flex-wrap: wrap; justify-content: flex-start !important; }
+  html body .navbar .navbar-actions { flex-wrap: wrap; gap: 4px; max-width: 100%; }
+  .mh-actions { gap: 4px; padding: 2px 0; }
+  .mh-act { font-size: 0.85rem; padding: 1px 6px; }
+  html body .navbar .search-button { margin: 4px 6px !important; }
+  html body { padding-bottom: 52px; }
+}
