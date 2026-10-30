@@ -76,4 +76,25 @@ function hasHomePageNote(notesDir) {
   return false;
 }
 
-module.exports = { hasHomePageNote, frontmatterIsHomePage, HOME_TAG };
+/**
+ * Every note under `notesDir` marked as a home page, with how much text each
+ * has. Used to pick a single winner when more than one note claims `/`.
+ */
+function listHomePageNotes(notesDir) {
+  const found = [];
+  for (const file of walkMarkdownFiles(notesDir)) {
+    if (!fileIsHomePage(file)) {
+      continue;
+    }
+    let bodyLength = 0;
+    try {
+      bodyLength = matter(fs.readFileSync(file, "utf8"), matterOptions).content.trim().length;
+    } catch {
+      bodyLength = 0;
+    }
+    found.push({ file, bodyLength });
+  }
+  return found;
+}
+
+module.exports = { hasHomePageNote, listHomePageNotes, frontmatterIsHomePage, HOME_TAG };

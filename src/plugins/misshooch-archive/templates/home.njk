@@ -1,0 +1,85 @@
+{% if not isFallbackIndex and not isAzPage and not isPhotosPage %}
+{% set featuredTag = pluginSettings.featuredTag or "featured" %}
+<div class="mh-home">
+  <section class="mh-hero">
+    {% if pluginSettings.portrait %}
+    <figure class="mh-portrait">
+      <img class="mh-skinfx" src="{{ pluginSettings.portrait }}" alt="Portrait of {{ meta.siteName }}" width="480">
+      <span class="mh-vt" aria-hidden="true">SYSTEM ANGEL // ONLINE</span>
+    </figure>
+    {% endif %}
+    <div class="mh-idcard" aria-label="Archive ID card">
+      <div class="mh-idh"><span>{{ meta.siteName }}</span><span>SIGNAL: ONLINE</span></div>
+      <div class="mh-idb">
+        {% if pluginSettings.portrait %}<img class="mh-skinfx mh-idph" src="{{ pluginSettings.portrait }}" alt="" width="84">{% endif %}
+        <dl>
+          <dt>SUBJECT</dt><dd>{{ meta.siteName }}</dd>
+          <dt>NOTES</dt><dd data-mh-count>&ndash;</dd>
+          <dt>STATUS</dt><dd>{{ pluginSettings.idStatus }}</dd>
+          <dt>TYPE</dt><dd>[ ] MACHINE &nbsp;[x] HUMAN</dd>
+        </dl>
+      </div>
+      <p class="mh-idt">AUTHORIZATION GRANTED TO THE ABOVE USER TO ENTER, WANDER AND GET LOST IN THIS ARCHIVE.</p>
+      <div class="mh-barcode" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <div class="mh-marq" aria-hidden="true">
+    <div class="mh-marq-in">
+      <span>{{ pluginSettings.marquee }}</span><span>{{ pluginSettings.marquee }}</span>
+    </div>
+  </div>
+
+  <section class="mh-paths" aria-label="Ways in">
+    <a class="mh-path" href="/a-z/" data-mh-start><b>START HERE</b><span>The first note: what is going on?!</span></a>
+    <a class="mh-path mh-rot" href="#graph-component"><b>THE GRID</b><span>See how every idea is wired to the others.</span></a>
+    <a class="mh-path" href="/a-z/"><b>A&ndash;Z</b><span>Every note, alphabetical, like an encyclopaedia of one person.</span></a>
+    <a class="mh-path mh-rot" href="/~random/"><b>GET LOST</b><span>Jump to a page at random.</span></a>
+    <a class="mh-path mh-rot" href="/photos/"><b>PHOTOS</b><span>Every photograph, in every effect.</span></a>
+    <a class="mh-path" href="#" data-mh-search><b>SEARCH</b><span>Look for a word anywhere in the archive.</span></a>
+  </section>
+
+  <div class="mh-cols">
+    <section class="mh-block">
+      <h2 class="mh-lab">featured writing</h2>
+      <ul class="mh-feat">
+        {% for item in collections.note | reverse %}
+          {% if item.data["dg-publish"] and not item.data.hide and featuredTag in item.data.tags and "gardenEntry" not in item.data.tags %}
+            <li>
+              <a class="mh-t internal-link" href="{{ item.url }}">{{ item.data.title or item.fileSlug }}</a>
+              {% if item.data.description %}<p>{{ item.data.description }}</p>{% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="mh-block" id="mh-latest">
+      <h2 class="mh-lab">latest</h2>
+      <ul class="mh-feat mh-latest">
+        {% for item in collections.note | reverse %}
+          {% if item.data["dg-publish"] and not item.data.hide and "gardenEntry" not in item.data.tags %}
+            <li>
+              <a class="mh-t internal-link" href="{{ item.url }}">{{ item.data.title or item.fileSlug }}</a>
+              {% if item.data.description %}<p>{{ item.data.description }}</p>{% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+
+  <section class="mh-pw">
+    <h2 class="mh-lab">unexpected pathways</h2>
+    <div class="callout mh-dlg" data-callout="error" data-mh-dialog>
+      <div class="callout-title"><div class="callout-title-inner">{{ pluginSettings.dialogTitle }}</div><span class="mh-dlg-x" aria-hidden="true">_ &#9633; x</span></div>
+      <div class="callout-content">
+        <p>{{ pluginSettings.dialogText }}</p>
+        <div class="mh-dlg-btns"><a href="/~random/">Continue</a><button type="button" data-mh-dialog-close>Cancel</button></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mh-barcode" aria-hidden="true"></div>
+</div>
+{% endif %}

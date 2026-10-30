@@ -1,0 +1,19 @@
+---
+permalink: /photos/
+---
+{% set photos = ["/img/archive/photo-1.jpg", "/img/archive/photo-2.jpg", "/img/archive/photo-3.jpg", "/img/archive/photo-4.jpg"] %}
+{% set effects = ["halftone", "phosphor", "cyber", "pixel", "code"] %}
+<div class="mh-gal">
+  <p class="mh-gal-intro">Each photograph as uploaded, then with each effect. Click any effect to see the original underneath.</p>
+  {% for src in photos %}
+    <section class="mh-gal-set">
+      <h2>photo {{ loop.index }}</h2>
+      <div class="mh-gal-row">
+        <div class="mh-gal-cell"><img src="{{ src }}" alt="Photograph {{ loop.index }}, as uploaded"><span class="mh-gal-cap">as uploaded</span></div>
+        {% for e in effects %}
+          <div class="mh-gal-cell"><img src="{{ src }}" alt="{{ e }}"><span class="mh-gal-cap">|{{ e }}</span></div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+</div>
