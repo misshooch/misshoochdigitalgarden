@@ -1,0 +1,45 @@
+# Miss Hooch Archive: how it works
+
+The redesign is one plugin, `src/plugins/misshooch-archive/`, plus two small changes in the core files. Nothing in your Obsidian workflow changes: frontmatter, permalinks, internal links and publishing all work as before.
+
+## What was added
+
+| File | What it does |
+|---|---|
+| `src/plugins/misshooch-archive/styles/archive.css` | Both skins, home page, callouts, status bar, photo frames |
+| `src/plugins/misshooch-archive/assets/archive.js` | Skin switch, photo effects, marginalia, music player |
+| `src/plugins/misshooch-archive/templates/` | Homepage section, status bar, nav buttons, related notes |
+| `src/site/a-z.njk` and `a-z.11tydata.js` | The alphabetical index at `/a-z/` |
+| `src/helpers/azGroups.js` | Groups note titles by letter |
+| `src/helpers/homeChoice.js` | Picks one homepage when several notes claim it |
+
+## The homepage safeguard
+
+`src/site/notes/notes.11tydata.js` now allows only one note to own `/`. If more than one note is marked as the home page (`dg-home`), the one with the most text wins, the others keep their own permalinks, and the build log prints a line starting `[home]`. Two notes can no longer fail the build by both writing `dist/index.html`.
+
+## Switching it off
+
+To go back to the old look without deleting anything, create `src/plugins/plugins.json` containing:
+
+    { "plugins": { "misshooch-archive": { "enabled": false } } }
+
+The A-Z page and the homepage safeguard stay.
+
+## Settings
+
+In `src/plugins/plugins.json` (or the plugin settings screen if your Obsidian plugin shows one):
+
+    { "plugins": { "misshooch-archive": { "settings": {
+        "marquee": "YOUR LINE HERE // ",
+        "featuredTag": "featured"
+    } } } }
+
+## Not changed
+
+`.env`, `vercel.json`, `package.json`, the theme setting, search, backlinks, link previews and the graph plugin. The graph is restyled through colour variables only, so its behaviour is untouched.
+
+## Known limits
+
+- The first real build is the first time the Eleventy parts run together. Check the Vercel preview before merging.
+- `![[photo.jpg|halftone]]` relies on Obsidian passing the word through as the image's alt text. If an effect does not appear on a photo, check the page source for `alt="halftone"`.
+- Photo effects run in the visitor's browser, so the original file is still downloaded.

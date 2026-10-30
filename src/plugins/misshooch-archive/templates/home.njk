@@ -1,0 +1,49 @@
+{% if not isFallbackIndex and not isAzPage %}
+{% set featuredTag = pluginSettings.featuredTag or "featured" %}
+<div class="mh-home">
+  <div class="mh-marq" aria-hidden="true">
+    <div class="mh-marq-in">
+      <span>{{ pluginSettings.marquee }}</span><span>{{ pluginSettings.marquee }}</span>
+    </div>
+  </div>
+
+  <section class="mh-paths" aria-label="Ways in">
+    <a class="mh-path" href="/a-z/"><b>A&ndash;Z</b><span>Every note, alphabetical, like an encyclopaedia of one person.</span></a>
+    <a class="mh-path mh-rot" href="/~random/"><b>GET LOST</b><span>Jump to a page at random.</span></a>
+    <a class="mh-path" href="#mh-latest"><b>LATEST</b><span>What changed most recently.</span></a>
+    <a class="mh-path mh-rot" href="#" data-mh-search><b>SEARCH</b><span>Look for a word anywhere in the archive.</span></a>
+  </section>
+
+  <div class="mh-cols">
+    <section class="mh-block">
+      <h2 class="mh-lab">featured writing</h2>
+      <ul class="mh-feat">
+        {% for item in collections.note | reverse %}
+          {% if item.data["dg-publish"] and not item.data.hide and featuredTag in item.data.tags and "gardenEntry" not in item.data.tags %}
+            <li>
+              <a class="mh-t internal-link" href="{{ item.url }}">{{ item.data.title or item.fileSlug }}</a>
+              {% if item.data.description %}<p>{{ item.data.description }}</p>{% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="mh-block" id="mh-latest">
+      <h2 class="mh-lab">latest</h2>
+      <ul class="mh-feat mh-latest">
+        {% for item in collections.note | reverse %}
+          {% if item.data["dg-publish"] and not item.data.hide and "gardenEntry" not in item.data.tags %}
+            <li>
+              <a class="mh-t internal-link" href="{{ item.url }}">{{ item.data.title or item.fileSlug }}</a>
+              {% if item.data.description %}<p>{{ item.data.description }}</p>{% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+
+  <div class="mh-barcode" aria-hidden="true"></div>
+</div>
+{% endif %}

@@ -1,0 +1,16 @@
+{% if tags and not isFallbackIndex and not isAzPage %}
+<div class="mh-related">
+  <div class="mh-rel-title">related</div>
+  <ul class="mh-rel-list">
+    {% for item in collections.note %}
+      {% if item.data["dg-publish"] and not item.data.hide and item.url != page.url and "gardenEntry" not in item.data.tags %}
+        {% for t in tags %}
+          {% if t != "note" and t != "gardenEntry" and t in item.data.tags %}
+            <li><a class="internal-link" href="{{ item.url }}">{{ item.data.title or item.fileSlug }}</a> <span class="mh-via">#{{ t }}</span></li>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

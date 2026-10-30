@@ -1,0 +1,33 @@
+{
+  "id": "misshooch-archive",
+  "name": "Miss Hooch Archive",
+  "version": "1.0.0",
+  "description": "Phosphor Archive design: Terminal and cyber-blue skins, an alphabetical index, a status bar with a music player, photo effects driven by Obsidian image embeds, marginalia and a restyled graph.",
+  "author": "Miss Hooch",
+  "slots": {
+    "common.head": "templates/head.njk",
+    "common.footer": "templates/statusbar.njk",
+    "navbar.actions": "templates/actions.njk",
+    "filetree.actions": "templates/actions.njk",
+    "index.afterContent": "templates/home.njk",
+    "sidebar.bottom": "templates/related.njk"
+  },
+  "styles": ["styles/archive.css"],
+  "scripts": ["assets/archive.js"],
+  "settings": [
+    {
+      "key": "marquee",
+      "name": "Homepage marquee text",
+      "description": "The large stretched line that scrolls across the homepage.",
+      "type": "text",
+      "default": "STILL HERE? // ARE YOU EXPANDING YOUR MIND? // NOTHING HERE IS FINISHED // "
+    },
+    {
+      "key": "featuredTag",
+      "name": "Featured tag",
+      "description": "Notes with this tag appear under 'featured writing' on the homepage. Add the tag in Obsidian, no code needed.",
+      "type": "text",
+      "default": "featured"
+    }
+  ]
+}

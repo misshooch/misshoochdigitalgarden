@@ -1,0 +1,24 @@
+---
+permalink: /a-z/
+---
+<div class="mh-az">
+  {% if azGroups.length > 0 %}
+    <nav class="mh-letters" aria-label="Jump to letter">
+      {% for g in azGroups %}<a href="#az-{{ 'num' if g.letter == '#' else g.letter }}">{{ g.letter }}</a>{% endfor %}
+    </nav>
+    <div class="mh-az-grid">
+      {% for g in azGroups %}
+        <section id="az-{{ 'num' if g.letter == '#' else g.letter }}">
+          <h2>{{ g.letter }}</h2>
+          <ul>
+            {% for n in g.notes %}
+              <li><a class="internal-link" href="{{ n.url }}">{{ n.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </section>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Nothing has been published here yet.</p>
+  {% endif %}
+</div>
