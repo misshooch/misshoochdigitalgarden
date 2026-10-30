@@ -222,7 +222,6 @@
           cv.setAttribute("role", "img"); cv.setAttribute("aria-label", img.getAttribute("alt") || "Portrait");
           parent.insertBefore(cv, host); host.style.display = "none";
           var it = { cv: cv, src: src, step: small ? 3 : null }; skinFxList.push(it); drawSkinFx(it);
-          if (!small) cv.addEventListener("click", function () { var showing = host.style.display !== "none"; host.style.display = showing ? "none" : "block"; cv.style.display = showing ? "block" : "none"; host.onclick = function () { host.style.display = "none"; cv.style.display = "block"; }; });
         });
       };
       if (img.complete && img.naturalWidth) go(); else img.addEventListener("load", go, { once: true });
@@ -440,9 +439,12 @@
       var i = 0;
       fig.addEventListener("click", function () {
         i = (i + 1) % photos.length;
-        var old = fig.querySelector("canvas, img"); if (!old) return;
-        var img = new Image(); img.className = "mh-skinfx"; img.alt = ""; img.width = 480;
-        img.onload = function () { old.replaceWith(img); safe("skin images", setupSkinFx); };
+        var img = new Image(); img.className = "mh-skinfx"; img.alt = "Portrait"; img.width = 480;
+        img.onload = function () {
+          $$("canvas, img, picture", fig).forEach(function (n) { n.remove(); });
+          skinFxList = skinFxList.filter(function (it) { return it.cv.isConnected; });
+          fig.insertBefore(img, fig.firstChild); safe("skin images", setupSkinFx);
+        };
         img.src = photos[i];
       });
     }
