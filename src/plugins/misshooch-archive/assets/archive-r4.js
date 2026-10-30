@@ -151,10 +151,13 @@
 
   function fxWord(img) {
     var alt = (img.getAttribute("alt") || "").trim().toLowerCase();
-    // Obsidian publishes ![[photo.jpg|halftone]] with the alt text "photo.jpg|halftone",
-    // so look for the effect word anywhere after the file name, last one wins.
-    var parts = alt.replace(/&#124;|&vert;/g, "|").split(/[\s|,\\]+/);
-    for (var i = parts.length - 1; i >= 0; i--) if (FX_MODES[parts[i]]) return parts[i];
+    // Obsidian's ![[photo.jpg|halftone|300]] arrives as the alt text "photo.jpghalftone300"
+    // (the build drops the | characters). Look only after the file extension so the
+    // file name itself can never be mistaken for an effect word.
+    var m = alt.match(/^.*\.(?:jpe?g|png|gif|webp|avif|heic)(.*)$/);
+    var rest = m ? m[1] : alt;
+    var words = rest.match(/[a-z]+/g) || [];
+    for (var i = words.length - 1; i >= 0; i--) if (FX_MODES[words[i]]) return words[i];
     return null;
   }
 
