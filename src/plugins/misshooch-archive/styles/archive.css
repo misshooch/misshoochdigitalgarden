@@ -434,3 +434,22 @@ html[data-calm] a.internal-link:hover { animation: none !important; }
 @keyframes mhblink{50%{opacity:0}}
 html[data-calm] .mh-boot .mh-cur{animation:none}
 .mh-portrait{cursor:pointer}
+
+/* preview-style chrome on the homepage */
+.mh-bios{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 16px;font-family:var(--mh-mono,"IBM Plex Mono",monospace);font-size:10px;letter-spacing:.12em;text-transform:uppercase;opacity:.7;padding:4px 0 6px;border-bottom:1px solid currentColor;margin-bottom:.4rem}
+.mh-bios span:last-child{font-variant-numeric:tabular-nums}
+body.mh-is-home h1.mh-title{font-family:"VT323","IBM Plex Mono",monospace;font-style:normal;font-weight:400;text-transform:uppercase;font-size:clamp(2.6rem,9vw,5.6rem);line-height:.95;letter-spacing:.03em}
+html[data-skin="cyber"] body.mh-is-home h1.mh-title{font-family:"Orbitron","IBM Plex Mono",monospace;font-weight:700;font-size:clamp(1.8rem,6vw,3.6rem);letter-spacing:.1em}
+
+/* tracking boxes on the portrait */
+.mh-trk{position:absolute;border:1.5px solid #ff2a2a;box-shadow:0 0 6px rgba(255,42,42,.6);pointer-events:none;animation:mhtrk 5s ease-in-out infinite}
+.mh-trk::before,.mh-trk::after{content:"";position:absolute;width:6px;height:6px;border:solid #ff2a2a;border-width:0}
+.mh-trk::before{left:-4px;top:-4px;border-left-width:2px;border-top-width:2px}
+.mh-trk::after{right:-4px;bottom:-4px;border-right-width:2px;border-bottom-width:2px}
+.mh-trk i{position:absolute;left:-1.5px;top:-15px;font:normal 9px/1 var(--mh-mono,monospace);letter-spacing:.1em;color:#fff;background:#ff2a2a;padding:2px 4px;white-space:nowrap}
+.mh-trk-b{animation-delay:-1.7s}.mh-trk-c{animation-delay:-3.1s}
+@keyframes mhtrk{0%,100%{transform:translate(0,0)}25%{transform:translate(4px,-3px)}50%{transform:translate(-3px,3px)}75%{transform:translate(3px,2px)}}
+html[data-calm] .mh-trk{animation:none}
+html[data-skin="cyber"] .mh-trk{border-color:#19d3ff;box-shadow:0 0 8px rgba(25,211,255,.7)}
+html[data-skin="cyber"] .mh-trk::before,html[data-skin="cyber"] .mh-trk::after{border-color:#19d3ff}
+html[data-skin="cyber"] .mh-trk i{background:#19d3ff;color:#06163a}

@@ -411,6 +411,14 @@
     var mode = function () { return (doc.documentElement.getAttribute("data-skin") === "cyber") ? "chrome" : "terminal"; };
     var lines = ["> archive online // " + n + " notes published", "> memory index: building", "> memory: " + bar, "> mode: " + mode()];
     box.innerHTML = lines.map(function (l, i) { return "<div" + (i === 3 ? ' data-mh-mode' : "") + ">" + l + "</div>"; }).join("") + '<span class="mh-cur"></span>';
+    h1.classList.add("mh-title");
+    var bios = doc.createElement("div"); bios.className = "mh-bios"; bios.setAttribute("aria-hidden", "true");
+    var site = (($(".mh-idh span") || {}).textContent || "MISSHOOCH").toUpperCase();
+    bios.innerHTML = "<span>MR BIOS (TM)</span><span>COPYRIGHT " + site + " " + new Date().getFullYear() + "</span><span>RESEARCH</span><span>VER 1.03</span><span data-mh-tc>00:00:00:00</span>";
+    h1.parentNode.insertBefore(bios, h1);
+    setInterval(function () { var t = new Date(); var p2 = function (x) { return ("0" + x).slice(-2); }; var el = $("[data-mh-tc]"); if (el) el.textContent = p2(t.getHours()) + ":" + p2(t.getMinutes()) + ":" + p2(t.getSeconds()) + ":" + p2(Math.floor(t.getMilliseconds() / 10)); }, 1000);
+    var oldest = $$(".mh-latest li a").pop(), st = $("[data-mh-start]");
+    if (oldest && st) st.setAttribute("href", oldest.getAttribute("href"));
     h1.parentNode.insertBefore(box, h1.nextSibling);
     doc.addEventListener("mh-skin", function () { var m = $("[data-mh-mode]"); if (m) m.textContent = "> mode: " + mode(); });
     // press / to search, click portrait to cycle photos
@@ -420,6 +428,13 @@
     });
     var photos = ["/img/archive/photo-1.jpg", "/img/archive/photo-2.jpg", "/img/archive/photo-3.jpg", "/img/archive/photo-4.jpg"];
     var fig = $(".mh-portrait");
+    if (fig && !$(".mh-trk", fig)) {
+      [["a", "SUBJECT 01", 38, 14, 34, 30], ["b", "EYE", 46, 34, 14, 8], ["c", "OBJ 07", 12, 58, 26, 26]].forEach(function (b) {
+        var d = doc.createElement("span"); d.className = "mh-trk mh-trk-" + b[0]; d.setAttribute("aria-hidden", "true");
+        d.style.cssText = "left:" + b[2] + "%;top:" + b[3] + "%;width:" + b[4] + "%;height:" + b[5] + "%";
+        d.innerHTML = "<i>" + b[1] + "</i>"; fig.appendChild(d);
+      });
+    }
     if (fig) {
       fig.style.cursor = "pointer"; fig.title = "click to change photo";
       var i = 0;
