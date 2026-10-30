@@ -9,10 +9,12 @@
     2. Status-bar timecode.
     3. Photo effects: an image embedded in Obsidian with one of these words,
        for example ![[photo.jpg|halftone]], is redrawn in that style.
-       Words: halftone, phosphor, cyber, pixel, code, sigil.
+       Words: halftone, phosphor, cyber, pixel, code.
        Click the picture to flip between the effect and the original.
     4. Footnotes shown as marginalia beside the paragraph.
-    5. A small player in the status bar for audio files linked or embedded in the page.
+    5. A player in the status bar: a site-wide playlist from the plugin settings, audio linked
+       or embedded in the note, or a built-in generated ambient track. It remembers its place.
+    5b. The homepage portrait and ID photo, drawn in the current skin.
     6. Marks the homepage and the index page on <body> for styling.
 */
 (function () {
@@ -163,7 +165,7 @@
     var W = Math.max(320, Math.min(900, Math.round(box || img.width || 600))), H = Math.round(W * nh / nw);
     var sw = 300, sh = Math.max(1, Math.round(300 * nh / nw));
     var src = doc.createElement("canvas"); src.width = sw; src.height = sh;
-    src.getContext("2d").drawImage(img, 0, 0, sw, sh);
+    src.getContext("2d", { willReadFrequently: true }).drawImage(img, 0, 0, sw, sh);
     var cv = doc.createElement("canvas"); cv.width = W; cv.height = H;
     cv.setAttribute("role", "img");
     cv.setAttribute("aria-label", "Photograph with " + word + " effect. Click to see the original.");
@@ -180,12 +182,52 @@
   }
 
   function setupFx() {
-    $$(".cm-s-obsidian img").forEach(function (img) {
-      var word = fxWord(img);
-      if (!word) return;
-      var go = function () { safe("photo effect", function () { applyFx(img, word); }); };
+    var imgs = $$(".cm-s-obsidian img").filter(function (img) { return fxWord(img); });
+    if (!imgs.length) return;
+    var io = ("IntersectionObserver" in window) ? new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var img = en.target.tagName === "PICTURE" ? $("img", en.target) : en.target, word = img && fxWord(img);
+        if (!img || !word) return;
+        safe("photo effect", function () { applyFx(img, word); });
+      });
+    }, { rootMargin: "300px" }) : null;
+    imgs.forEach(function (img) {
+      var go = function () {
+        if (io) io.observe(img.closest("picture") || img);
+        else safe("photo effect", function () { applyFx(img, fxWord(img)); });
+      };
       if (img.complete && img.naturalWidth) go(); else img.addEventListener("load", go, { once: true });
     });
+  }
+
+  /* Portrait and ID photo: drawn in whichever skin is on, redrawn when it changes. */
+  var skinFxList = [];
+  function skinMode() { return root.getAttribute("data-skin") === "cyber" ? "soft" : "phosphor"; }
+  function drawSkinFx(it) { treat(it.cv, skinMode(), it.src, it.step); }
+  function setupSkinFx() {
+    $$("img.mh-skinfx").forEach(function (img) {
+      var go = function () {
+        safe("skin image", function () {
+          var nw = img.naturalWidth, nh = img.naturalHeight;
+          if (!nw || !nh || img.getAttribute("data-mh-done")) return;
+          img.setAttribute("data-mh-done", "1");
+          var host = img.closest("picture") || img, parent = host.parentNode, small = img.classList.contains("mh-idph");
+          var W = small ? 84 : Math.max(320, Math.min(900, Math.round(parent.getBoundingClientRect().width || 480)));
+          var H = Math.round(W * nh / nw), sw = small ? 90 : 300, sh = Math.max(1, Math.round(sw * nh / nw));
+          var src = doc.createElement("canvas"); src.width = sw; src.height = sh;
+          src.getContext("2d", { willReadFrequently: true }).drawImage(img, 0, 0, sw, sh);
+          var cv = doc.createElement("canvas"); cv.width = W; cv.height = H;
+          cv.setAttribute("role", "img"); cv.setAttribute("aria-label", img.getAttribute("alt") || "Portrait");
+          parent.insertBefore(cv, host); host.style.display = "none";
+          var it = { cv: cv, src: src, step: small ? 3 : null }; skinFxList.push(it); drawSkinFx(it);
+          if (!small) cv.addEventListener("click", function () { var showing = host.style.display !== "none"; host.style.display = showing ? "none" : "block"; cv.style.display = showing ? "block" : "none"; host.onclick = function () { host.style.display = "none"; cv.style.display = "block"; }; });
+        });
+      };
+      if (img.complete && img.naturalWidth) go(); else img.addEventListener("load", go, { once: true });
+    });
+    doc.addEventListener("mh-skin", function () { skinFxList.forEach(drawSkinFx); });
   }
 
   /* ---------- skin + calm ---------- */
@@ -200,7 +242,7 @@
       b.addEventListener("click", function () {
         if (root.getAttribute("data-skin") === "cyber") { root.removeAttribute("data-skin"); store("mh-skin", null); }
         else { root.setAttribute("data-skin", "cyber"); store("mh-skin", "cyber"); }
-        paint();
+        paint(); doc.dispatchEvent(new Event("mh-skin"));
       });
     });
     calm.forEach(function (b) {
@@ -245,47 +287,103 @@
   function setupPlayer() {
     var box = $("#mh-player"); if (!box) return;
     var tracks = [], seen = {};
-    function add(src, title) { if (!src || seen[src]) return; seen[src] = 1; tracks.push({ src: src, title: title || decodeURIComponent(src.split("/").pop().replace(/\.[a-z0-9]+$/i, "")) }); }
+    function add(src, title) {
+      if (!src || seen[src]) return; seen[src] = 1;
+      tracks.push({ src: src, title: title || decodeURIComponent(src.split("?")[0].split("/").pop().replace(/\.[a-z0-9]+$/i, "")) });
+    }
+    // 1. site-wide playlist from the plugin settings: "Title|https://file.mp3; Title|https://file2.mp3"
+    (box.getAttribute("data-playlist") || "").split(";").forEach(function (item) {
+      item = item.trim(); if (!item) return;
+      var parts = item.split("|");
+      add((parts.length > 1 ? parts[1] : parts[0]).trim(), parts.length > 1 ? parts[0].trim() : "");
+    });
+    // 2. audio embedded or linked in the current note
     $$(".cm-s-obsidian audio").forEach(function (a) { add(a.currentSrc || a.getAttribute("src") || ($("source", a) && $("source", a).src)); });
     $$(".cm-s-obsidian a[href]").forEach(function (a) { if (/\.(mp3|m4a|ogg|wav|flac)(\?.*)?$/i.test(a.getAttribute("href"))) add(a.href, a.textContent.trim()); });
-    if (!tracks.length) return;
-    box.hidden = false;
-    var audio = new Audio(), idx = 0, playing = false, ctx = null, analyser = null, raf = 0;
-    var title = $("#mh-p-title"), playBtn = $("[data-mh-play]", box), eq = $("#mh-eq");
-    function load(i) { idx = (i + tracks.length) % tracks.length; audio.src = tracks[idx].src; title.textContent = tracks[idx].title; }
+    // 3. nothing to play: a generated ambient track so the player always works
+    if (!tracks.length) tracks.push({ gen: true, title: "ambient_demo (generated)" });
+
+    var audio = new Audio(); audio.preload = "none";
+    var idx = 0, playing = false, ctx = null, analyser = null, master = null, mediaSrc = null, gen = null, raf = 0, useWebAudio = false;
+    var title = $("#mh-p-title"), playBtn = $("[data-mh-play]", box), eq = $("#mh-eq"), vol = $("#mh-vol");
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem("mh-player") || "{}") || {}; } catch (e) { saved = {}; }
+    if (vol && saved.v != null && !isNaN(+saved.v)) vol.value = saved.v;
+    tracks.forEach(function (t, i) { if (saved.k && (t.src || "gen") === saved.k) idx = i; });
+    useWebAudio = tracks.every(function (t) { if (t.gen) return true; try { return new URL(t.src, location.href).origin === location.origin; } catch (e) { return false; } });
+
+    function key() { return tracks[idx].src || "gen"; }
+    function save() { store("mh-player", JSON.stringify({ k: key(), t: audio.currentTime || 0, v: vol ? vol.value : 0.25, p: playing ? 1 : 0 })); }
+    function volume() { return vol ? +vol.value : 0.25; }
+    function applyVolume() { if (master) master.gain.value = volume() * 0.5; audio.volume = useWebAudio ? 1 : volume(); }
+    function ensureCtx() {
+      if (ctx) return true;
+      var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+      ctx = new AC(); master = ctx.createGain(); analyser = ctx.createAnalyser(); analyser.fftSize = 64;
+      master.connect(analyser); analyser.connect(ctx.destination);
+      if (useWebAudio) { mediaSrc = ctx.createMediaElementSource(audio); mediaSrc.connect(master); }
+      applyVolume(); return true;
+    }
+    function startGen() {
+      stopGen();
+      var f = ctx.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 700; f.Q.value = 4;
+      var o1 = ctx.createOscillator(), o2 = ctx.createOscillator(), lfo = ctx.createOscillator(), lg = ctx.createGain();
+      o1.type = "sawtooth"; o2.type = "triangle"; o1.frequency.value = 110; o2.frequency.value = 164.9; o2.detune.value = 7;
+      lfo.frequency.value = 0.09; lg.gain.value = 380; lfo.connect(lg); lg.connect(f.frequency);
+      o1.connect(f); o2.connect(f); f.connect(master); o1.start(); o2.start(); lfo.start();
+      gen = [o1, o2, lfo, f];
+    }
+    function stopGen() { if (!gen) return; try { gen[0].stop(); gen[1].stop(); gen[2].stop(); gen[3].disconnect(); } catch (e) {} gen = null; }
     function bars() {
       if (!eq) return; var c = eq.getContext("2d"); c.clearRect(0, 0, eq.width, eq.height);
       var data = new Uint8Array(analyser ? analyser.frequencyBinCount : 16);
-      if (analyser) analyser.getByteFrequencyData(data);
+      if (analyser && (tracks[idx].gen || useWebAudio)) analyser.getByteFrequencyData(data);
       c.fillStyle = getComputedStyle(doc.body).getPropertyValue("--mh-cy").trim() || "#5dff8a";
       for (var i = 0; i < 12; i++) {
-        var v = analyser ? data[i] / 255 : (playing ? 0.25 + 0.5 * Math.abs(Math.sin(Date.now() / 220 + i)) : 0);
+        var v = (analyser && (tracks[idx].gen || useWebAudio)) ? data[i] / 255 : (playing ? 0.25 + 0.5 * Math.abs(Math.sin(Date.now() / 220 + i)) : 0);
         var h = Math.max(2, v * eq.height); c.fillRect(i * 8 + 1, eq.height - h, 6, h);
       }
       raf = playing && !reduce ? requestAnimationFrame(bars) : 0;
     }
     function setPlaying(on) {
       playing = on; playBtn.innerHTML = on ? "&#10074;&#10074;" : "&#9654;"; playBtn.setAttribute("aria-pressed", on ? "true" : "false");
-      if (on) bars();
+      if (on && !raf) bars(); save();
     }
-    function toggle() {
-      if (playing) { audio.pause(); setPlaying(false); return; }
-      try {
-        if (!ctx) {
-          var AC = window.AudioContext || window.webkitAudioContext;
-          if (AC) { ctx = new AC(); analyser = ctx.createAnalyser(); analyser.fftSize = 64; var s = ctx.createMediaElementSource(audio); s.connect(analyser); analyser.connect(ctx.destination); }
-        }
-        if (ctx && ctx.state === "suspended") ctx.resume();
-      } catch (e) { analyser = null; }
-      audio.play().then(function () { setPlaying(true); }).catch(function () { setPlaying(false); });
+    function load(i) {
+      var was = playing; idx = (i + tracks.length) % tracks.length; title.textContent = tracks[idx].title;
+      if (tracks[idx].gen) { audio.pause(); } else { stopGen(); audio.src = tracks[idx].src; }
+      if (was) play();
     }
-    load(0);
-    playBtn.addEventListener("click", toggle);
-    $("[data-mh-next]", box).addEventListener("click", function () { var was = playing; load(idx + 1); if (was) audio.play().catch(function () {}); });
-    $("[data-mh-prev]", box).addEventListener("click", function () { var was = playing; load(idx - 1); if (was) audio.play().catch(function () {}); });
-    audio.addEventListener("ended", function () { load(idx + 1); audio.play().catch(function () { setPlaying(false); }); });
-    // If the visitor starts a native player in the page, stop ours.
-    $$(".cm-s-obsidian audio").forEach(function (a) { a.addEventListener("play", function () { audio.pause(); setPlaying(false); }); });
+    function play() {
+      var t = tracks[idx];
+      if (t.gen) {
+        if (!ensureCtx()) { setPlaying(false); return; }
+        audio.pause(); if (ctx.state === "suspended") ctx.resume(); startGen(); setPlaying(true);
+      } else {
+        stopGen(); if (!audio.src) audio.src = t.src;
+        try { if (useWebAudio) { ensureCtx(); if (ctx && ctx.state === "suspended") ctx.resume(); } } catch (e) {}
+        applyVolume(); audio.play().then(function () { setPlaying(true); }).catch(function () { setPlaying(false); });
+      }
+    }
+    function pause() { audio.pause(); stopGen(); setPlaying(false); }
+
+    title.textContent = tracks[idx].title;
+    if (!tracks[idx].gen) {
+      audio.src = tracks[idx].src;
+      if (saved.k === key() && saved.t > 1) audio.addEventListener("loadedmetadata", function () { try { audio.currentTime = saved.t; } catch (e) {} }, { once: true });
+    }
+    applyVolume();
+    playBtn.addEventListener("click", function () { if (playing) pause(); else play(); });
+    $("[data-mh-next]", box).addEventListener("click", function () { load(idx + 1); });
+    $("[data-mh-prev]", box).addEventListener("click", function () { load(idx - 1); });
+    if (vol) vol.addEventListener("input", function () { applyVolume(); save(); });
+    audio.addEventListener("ended", function () { load(idx + 1); if (tracks.length > 1) play(); else setPlaying(false); });
+    audio.addEventListener("error", function () { setPlaying(false); title.textContent = tracks[idx].title + " (could not load)"; });
+    var last = 0; audio.addEventListener("timeupdate", function () { var n = Date.now(); if (n - last > 2000) { last = n; save(); } });
+    window.addEventListener("pagehide", save);
+    $$(".cm-s-obsidian audio").forEach(function (a) { a.addEventListener("play", function () { if (playing) pause(); }); });
+    // Carry on across pages: browsers may refuse to start sound without a click, so this is best effort.
+    if (saved.p) { try { play(); } catch (e) {} }
   }
 
   /* ---------- search button + page markers ---------- */
@@ -293,13 +391,51 @@
     $$("[data-mh-search]").forEach(function (a) {
       a.addEventListener("click", function (e) { e.preventDefault(); if (typeof window.toggleSearch === "function") window.toggleSearch(); });
     });
+    var n = $$(".mh-latest li").length + 1;
+    $$("[data-mh-count]").forEach(function (el) { el.textContent = ("000000" + n).slice(-6); });
+    $$("[data-mh-dialog-close]").forEach(function (b) {
+      b.addEventListener("click", function () { var d = b.closest("[data-mh-dialog]"); if (d) d.style.display = "none"; });
+    });
     if ($(".mh-home")) doc.body.classList.add("mh-is-home");
-    if ($(".mh-az")) doc.body.classList.add("mh-is-az");
+    if ($(".mh-az, .mh-gal")) doc.body.classList.add("mh-is-az");
+  }
+
+
+  function setupBoot() {
+    var home = $(".mh-home"); if (!home) return;
+    var h1 = $(".cm-s-obsidian h1, .content h1, h1"); if (!h1 || $(".mh-boot")) return;
+    var n = $$(".mh-latest li").length + 1;
+    var pct = Math.min(100, 40 + n * 10);
+    var bar = "[" + "#".repeat(Math.round(pct / 10)) + "-".repeat(10 - Math.round(pct / 10)) + "] " + pct + "%";
+    var box = doc.createElement("div"); box.className = "mh-boot"; box.setAttribute("aria-hidden", "true");
+    var mode = function () { return (doc.documentElement.getAttribute("data-skin") === "cyber") ? "chrome" : "terminal"; };
+    var lines = ["> archive online // " + n + " notes published", "> memory index: building", "> memory: " + bar, "> mode: " + mode()];
+    box.innerHTML = lines.map(function (l, i) { return "<div" + (i === 3 ? ' data-mh-mode' : "") + ">" + l + "</div>"; }).join("") + '<span class="mh-cur"></span>';
+    h1.parentNode.insertBefore(box, h1.nextSibling);
+    doc.addEventListener("mh-skin", function () { var m = $("[data-mh-mode]"); if (m) m.textContent = "> mode: " + mode(); });
+    // press / to search, click portrait to cycle photos
+    doc.addEventListener("keydown", function (e) {
+      var t = e.target && e.target.tagName;
+      if (e.key === "/" && t !== "INPUT" && t !== "TEXTAREA" && typeof window.toggleSearch === "function") { e.preventDefault(); window.toggleSearch(); }
+    });
+    var photos = ["/img/archive/photo-1.jpg", "/img/archive/photo-2.jpg", "/img/archive/photo-3.jpg", "/img/archive/photo-4.jpg"];
+    var fig = $(".mh-portrait");
+    if (fig) {
+      fig.style.cursor = "pointer"; fig.title = "click to change photo";
+      var i = 0;
+      fig.addEventListener("click", function () {
+        i = (i + 1) % photos.length;
+        var old = fig.querySelector("canvas, img"); if (!old) return;
+        var img = new Image(); img.className = "mh-skinfx"; img.alt = ""; img.width = 480;
+        img.onload = function () { old.replaceWith(img); safe("skin images", setupSkinFx); };
+        img.src = photos[i];
+      });
+    }
   }
 
   function start() {
-    safe("skin", setupSkin); safe("clock", setupClock); safe("misc", setupMisc);
-    safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("photo effects", setupFx);
+    safe("skin", setupSkin); safe("clock", setupClock); safe("misc", setupMisc); safe("boot", setupBoot);
+    safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("skin images", setupSkinFx); safe("photo effects", setupFx);
   }
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
 })();

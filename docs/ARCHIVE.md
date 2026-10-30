@@ -43,3 +43,11 @@ In `src/plugins/plugins.json` (or the plugin settings screen if your Obsidian pl
 - The first real build is the first time the Eleventy parts run together. Check the Vercel preview before merging.
 - `![[photo.jpg|halftone]]` relies on Obsidian passing the word through as the image's alt text. If an effect does not appear on a photo, check the page source for `alt="halftone"`.
 - Photo effects run in the visitor's browser, so the original file is still downloaded.
+
+
+## Added in v1.1
+- Homepage ID card and portrait: set `portrait` (default `/img/archive/photo-1.jpg`) and `idStatus` in the plugin settings. Click the portrait to cycle photos.
+- Boot lines under the homepage heading; press `/` anywhere to search.
+- Music player: always in the bottom bar. Set `playlist` as `Title|url; Title|url`, or link an audio file in a note.
+- `/photos/` page shows the photos in every effect.
+- Dropdown boxes: write a callout with a minus, `> [!note]- Title`, and it folds.

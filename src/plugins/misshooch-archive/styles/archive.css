@@ -323,6 +323,90 @@ html body.markdown-preview-view .sidebar .backlink-card { border-bottom: 1px dot
 html[data-skin="cyber"] body.markdown-preview-view .sidebar .backlink-title,
 html[data-skin="cyber"] body.markdown-preview-view .sidebar .toc-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.14em; }
 
+
+/* ---------- hero: portrait + ID card ---------- */
+.mh-hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; margin: 1.4em 0; align-items: start; }
+@media (min-width: 640px) { .mh-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.mh-portrait { position: relative; margin: 0; border: 1px solid var(--mh-line); background: #000; padding: 6px; }
+.mh-portrait canvas { display: block; width: 100%; height: auto; cursor: pointer; }
+.mh-portrait img { display: block; width: 100%; height: auto; }
+.mh-portrait::after {
+  content: ""; position: absolute; inset: -5px; pointer-events: none;
+  background:
+    linear-gradient(var(--mh-cy), var(--mh-cy)) 0 0 / 14px 2px no-repeat, linear-gradient(var(--mh-cy), var(--mh-cy)) 0 0 / 2px 14px no-repeat,
+    linear-gradient(var(--mh-cy), var(--mh-cy)) 100% 0 / 14px 2px no-repeat, linear-gradient(var(--mh-cy), var(--mh-cy)) 100% 0 / 2px 14px no-repeat,
+    linear-gradient(var(--mh-cy), var(--mh-cy)) 0 100% / 14px 2px no-repeat, linear-gradient(var(--mh-cy), var(--mh-cy)) 0 100% / 2px 14px no-repeat,
+    linear-gradient(var(--mh-cy), var(--mh-cy)) 100% 100% / 14px 2px no-repeat, linear-gradient(var(--mh-cy), var(--mh-cy)) 100% 100% / 2px 14px no-repeat;
+}
+.mh-vt { position: absolute; right: 12px; top: 14px; writing-mode: vertical-rl; font: 10px var(--mh-mono); letter-spacing: 0.3em; color: var(--mh-cy); text-shadow: 0 0 4px #000; pointer-events: none; }
+html[data-skin="cyber"] .mh-portrait { border: 2px solid #fff; outline: 1px solid #8fb0e6; border-radius: 16px; background: #06163a; box-shadow: 0 4px 16px rgba(31, 91, 255, 0.28); }
+html[data-skin="cyber"] .mh-portrait canvas { border-radius: 10px; }
+html[data-skin="cyber"] .mh-portrait::after { inset: 8px; }
+html[data-skin="cyber"] .mh-vt { font-family: var(--mh-ui); font-size: 9px; }
+
+.mh-idcard { border: 1px solid var(--mh-accent); background: var(--mh-panel); padding: 8px; box-shadow: 5px 5px 0 var(--mh-line); }
+.mh-idh { display: flex; justify-content: space-between; gap: 8px; font-family: var(--mh-ui); font-size: 1.15rem; letter-spacing: 0.08em; color: var(--mh-accent); border-bottom: 1px solid var(--mh-line); padding-bottom: 3px; }
+.mh-idh span + span { color: var(--mh-dim); font-size: 0.9rem; align-self: center; }
+.mh-idb { display: flex; gap: 12px; padding: 8px 0; }
+.mh-idb canvas, .mh-idb img { width: 84px; height: auto; flex: none; border: 1px solid var(--mh-accent); background: #000; align-self: flex-start; }
+.mh-idb picture { flex: none; }
+.mh-idb dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; font: 12px/1.6 var(--mh-mono); align-content: start; }
+.mh-idb dt { color: var(--mh-dim); }
+.mh-idb dd { margin: 0; color: var(--mh-fg); }
+.mh-idt { margin: 0 0 8px; font: 10.5px/1.4 var(--mh-mono); color: var(--mh-dim); border: 1px solid var(--mh-line); padding: 6px; }
+html[data-skin="cyber"] .mh-idcard { border: 2px solid #fff; outline: 1px solid #8fb0e6; border-radius: 16px; background: linear-gradient(#ffffff, #dbe8ff); box-shadow: 0 4px 16px rgba(31, 91, 255, 0.28); padding: 0 0 8px; overflow: hidden; }
+html[data-skin="cyber"] .mh-idh { font-family: var(--mh-ui); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; padding: 7px 12px; border: 0; color: #fff; background: linear-gradient(90deg, #1f5bff, #6fa6f5 75%, #bcd6f7); }
+html[data-skin="cyber"] .mh-idh span + span { background: #c9f5a0; color: #1d4d00; border-radius: 999px; padding: 0 10px; font-size: 0.58rem; }
+html[data-skin="cyber"] .mh-idb, html[data-skin="cyber"] .mh-idt, html[data-skin="cyber"] .mh-idcard .mh-barcode { margin-left: 12px; margin-right: 12px; }
+html[data-skin="cyber"] .mh-idb canvas, html[data-skin="cyber"] .mh-idb img { border-radius: 12px; border: 2px solid #fff; outline: 1px solid #8fb0e6; background: #06163a; }
+html[data-skin="cyber"] .mh-idt { border-radius: 10px; border: 1px solid #8fb0e6; background: #fff; }
+html[data-skin="cyber"] .mh-barcode { background: repeating-linear-gradient(90deg, #0e2a5c 0 2px, transparent 2px 4px, #0e2a5c 4px 5px, transparent 5px 8px, #0e2a5c 8px 11px, transparent 11px 13px); }
+.mh-idcard .mh-barcode { margin-top: 0; }
+
+/* ---------- dialog box on the homepage + dropdown (foldable) callouts ---------- */
+.mh-pw { margin-top: 1.6em; }
+.mh-pw .mh-dlg { margin: 0.6em 0 0; max-width: 420px; }
+.mh-dlg .callout-title { display: flex; justify-content: space-between; gap: 8px; }
+.mh-dlg-x { font-family: var(--mh-ui); letter-spacing: 0.1em; }
+.mh-dlg-btns { display: flex; gap: 8px; margin-top: 8px; }
+.mh-dlg-btns a, .mh-dlg-btns button {
+  font-family: var(--mh-ui); font-size: 1.15rem; line-height: 1.2; color: var(--mh-accent) !important; background: transparent; border: 1px solid var(--mh-accent);
+  padding: 1px 16px; cursor: pointer; text-decoration: none !important;
+}
+.mh-dlg-btns a:hover, .mh-dlg-btns button:hover { background: var(--mh-accent); color: var(--mh-bg) !important; }
+html[data-skin="cyber"] .mh-dlg-btns a, html[data-skin="cyber"] .mh-dlg-btns button {
+  font-size: 0.62rem; letter-spacing: 0.1em; border-radius: 999px; border: 1px solid #5f86d6; color: #0e2a5c !important; padding: 4px 16px;
+  background: linear-gradient(#ffffff 0%, #d4e4ff 47%, #8fb4f5 53%, #cfe1ff 100%);
+}
+html[data-skin="cyber"] .mh-dlg-btns a:hover, html[data-skin="cyber"] .mh-dlg-btns button:hover { color: #fff !important; background: linear-gradient(#7fe8ff 0%, #19b4ff 50%, #1f5bff 52%, #3d8bff 100%); }
+
+/* foldable callouts ( > [!note]- Title ) look like dropdown panels */
+html body.markdown-preview-view .callout.is-collapsible .callout-title { cursor: pointer; display: flex; align-items: center; gap: 8px; user-select: none; }
+html body.markdown-preview-view .callout.is-collapsible .callout-title:hover { filter: brightness(1.15); }
+html body.markdown-preview-view .callout .callout-fold { margin-left: auto; display: inline-flex; align-items: center; }
+html body.markdown-preview-view .callout.is-collapsible .callout-title::after { content: "\25BE"; margin-left: auto; font-size: 1.1em; transition: transform 0.15s; }
+html body.markdown-preview-view .callout.is-collapsible.is-collapsed .callout-title::after { transform: rotate(-90deg); }
+html body.markdown-preview-view .callout.is-collapsible .callout-fold { display: none; }
+html body.markdown-preview-view .callout.is-collapsed .callout-content { display: none; }
+html body.markdown-preview-view .callout.is-collapsed { box-shadow: 3px 3px 0 var(--mh-line); }
+
+/* ---------- photos page ---------- */
+.mh-gal-intro { font: 12.5px/1.5 var(--mh-mono); color: var(--mh-dim); max-width: 46em; }
+.mh-gal-set { margin-bottom: 1.6em; }
+html body.markdown-preview-view .content .mh-gal-set h2 { font-size: 1.6rem; margin: 0 0 8px; }
+.mh-gal-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.mh-gal-cell { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.mh-gal-cell img { display: block; width: 100%; height: auto; border: 1px solid var(--mh-line); }
+.mh-gal-cell .mh-fx { margin: 0; padding: 3px; }
+.mh-gal-cell .mh-fx figcaption { display: none; }
+.mh-gal-cap { font: 11px var(--mh-mono); letter-spacing: 0.08em; color: var(--mh-dim); }
+html[data-skin="cyber"] .mh-gal-cell img { border-radius: 10px; border: 2px solid #fff; outline: 1px solid #8fb0e6; }
+
+/* ---------- player additions ---------- */
+.mh-vol { display: inline-flex; align-items: center; gap: 4px; }
+.mh-vol input { width: 72px; accent-color: var(--mh-accent); }
+@media (max-width: 600px) { .mh-vol { display: none; } }
+
 /* ---------- small screens ---------- */
 @media (max-width: 600px) {
   .mh-status { gap: 8px; }
@@ -342,3 +426,11 @@ html[data-calm] a.internal-link:hover { animation: none !important; }
   html body.markdown-preview-view .content a.internal-link:hover { animation: none; }
   .mh-path { transition: none; }
 }
+
+/* boot lines under the heading */
+.mh-boot{font-family:var(--mh-mono,"IBM Plex Mono",monospace);font-size:.85rem;line-height:1.7;margin:.4rem 0 1.4rem;padding:.6rem .9rem;border-left:2px solid currentColor;opacity:.85;letter-spacing:.04em}
+.mh-boot div{white-space:pre-wrap}
+.mh-boot .mh-cur{display:inline-block;width:.6em;height:1em;background:currentColor;vertical-align:-.15em;animation:mhblink 1s steps(1) infinite}
+@keyframes mhblink{50%{opacity:0}}
+html[data-calm] .mh-boot .mh-cur{animation:none}
+.mh-portrait{cursor:pointer}

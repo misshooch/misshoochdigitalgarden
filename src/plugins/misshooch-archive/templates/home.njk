@@ -1,6 +1,29 @@
-{% if not isFallbackIndex and not isAzPage %}
+{% if not isFallbackIndex and not isAzPage and not isPhotosPage %}
 {% set featuredTag = pluginSettings.featuredTag or "featured" %}
 <div class="mh-home">
+  <section class="mh-hero">
+    {% if pluginSettings.portrait %}
+    <figure class="mh-portrait">
+      <img class="mh-skinfx" src="{{ pluginSettings.portrait }}" alt="Portrait of {{ meta.siteName }}" width="480">
+      <span class="mh-vt" aria-hidden="true">SYSTEM ANGEL // ONLINE</span>
+    </figure>
+    {% endif %}
+    <div class="mh-idcard" aria-label="Archive ID card">
+      <div class="mh-idh"><span>{{ meta.siteName }}</span><span>SIGNAL: ONLINE</span></div>
+      <div class="mh-idb">
+        {% if pluginSettings.portrait %}<img class="mh-skinfx mh-idph" src="{{ pluginSettings.portrait }}" alt="" width="84">{% endif %}
+        <dl>
+          <dt>SUBJECT</dt><dd>{{ meta.siteName }}</dd>
+          <dt>NOTES</dt><dd data-mh-count>&ndash;</dd>
+          <dt>STATUS</dt><dd>{{ pluginSettings.idStatus }}</dd>
+          <dt>TYPE</dt><dd>[ ] MACHINE &nbsp;[x] HUMAN</dd>
+        </dl>
+      </div>
+      <p class="mh-idt">AUTHORIZATION GRANTED TO THE ABOVE USER TO ENTER, WANDER AND GET LOST IN THIS ARCHIVE.</p>
+      <div class="mh-barcode" aria-hidden="true"></div>
+    </div>
+  </section>
+
   <div class="mh-marq" aria-hidden="true">
     <div class="mh-marq-in">
       <span>{{ pluginSettings.marquee }}</span><span>{{ pluginSettings.marquee }}</span>
@@ -10,7 +33,7 @@
   <section class="mh-paths" aria-label="Ways in">
     <a class="mh-path" href="/a-z/"><b>A&ndash;Z</b><span>Every note, alphabetical, like an encyclopaedia of one person.</span></a>
     <a class="mh-path mh-rot" href="/~random/"><b>GET LOST</b><span>Jump to a page at random.</span></a>
-    <a class="mh-path" href="#mh-latest"><b>LATEST</b><span>What changed most recently.</span></a>
+    <a class="mh-path" href="/photos/"><b>PHOTOS</b><span>Every photograph, in every effect.</span></a>
     <a class="mh-path mh-rot" href="#" data-mh-search><b>SEARCH</b><span>Look for a word anywhere in the archive.</span></a>
   </section>
 
@@ -43,6 +66,17 @@
       </ul>
     </section>
   </div>
+
+  <section class="mh-pw">
+    <h2 class="mh-lab">unexpected pathways</h2>
+    <div class="callout mh-dlg" data-callout="error" data-mh-dialog>
+      <div class="callout-title"><div class="callout-title-inner">{{ pluginSettings.dialogTitle }}</div><span class="mh-dlg-x" aria-hidden="true">_ &#9633; x</span></div>
+      <div class="callout-content">
+        <p>{{ pluginSettings.dialogText }}</p>
+        <div class="mh-dlg-btns"><a href="/~random/">Continue</a><button type="button" data-mh-dialog-close>Cancel</button></div>
+      </div>
+    </div>
+  </section>
 
   <div class="mh-barcode" aria-hidden="true"></div>
 </div>
