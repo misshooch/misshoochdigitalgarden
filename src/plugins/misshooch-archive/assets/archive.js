@@ -425,8 +425,8 @@
       var t = e.target && e.target.tagName;
       if (e.key === "/" && t !== "INPUT" && t !== "TEXTAREA" && typeof window.toggleSearch === "function") { e.preventDefault(); window.toggleSearch(); }
     });
-    var photos = ["/img/archive/photo-1.jpg", "/img/archive/photo-2.jpg", "/img/archive/photo-3.jpg", "/img/archive/photo-4.jpg"];
     var fig = $(".mh-portrait");
+    var photos = fig ? (fig.getAttribute("data-photos") || "").split("|").filter(Boolean) : [];
     if (fig && !$(".mh-trk", fig)) {
       [["a", "SUBJECT 01", 38, 14, 34, 30], ["b", "EYE", 46, 34, 14, 8], ["c", "OBJ 07", 12, 58, 26, 26]].forEach(function (b) {
         var d = doc.createElement("span"); d.className = "mh-trk mh-trk-" + b[0]; d.setAttribute("aria-hidden", "true");
@@ -434,7 +434,7 @@
         d.innerHTML = "<i>" + b[1] + "</i>"; fig.appendChild(d);
       });
     }
-    if (fig) {
+    if (fig && photos.length > 1) {
       fig.style.cursor = "pointer"; fig.title = "click to change photo";
       var i = 0;
       fig.addEventListener("click", function () {

@@ -38,7 +38,7 @@
       "name": "Homepage portrait",
       "description": "Path of the photo shown on the homepage and on the ID card. Leave empty for none.",
       "type": "text",
-      "default": "/img/archive/photo-1.jpg"
+      "default": ""
     },
     {
       "key": "idStatus",

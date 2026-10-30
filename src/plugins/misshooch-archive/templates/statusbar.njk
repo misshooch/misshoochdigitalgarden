@@ -2,7 +2,7 @@
 <div class="mh-status" role="region" aria-label="Archive status bar">
   <span class="mh-s-name">{{ meta.siteName }}</span>
   <span class="mh-s-tc" id="mh-tc" aria-hidden="true">00:00:00:00</span>
-  <div class="mh-player" id="mh-player" data-playlist="{{ pluginSettings.playlist }}">
+  <div class="mh-player" id="mh-player" data-playlist="{{ pluginSettings.playlist }}{% if pluginSettings.playlist and archiveMusic.playlist %}; {% endif %}{{ archiveMusic.playlist }}">
     <button type="button" data-mh-prev aria-label="Previous track">&#9198;</button>
     <button type="button" data-mh-play aria-label="Play or pause" aria-pressed="false">&#9654;</button>
     <button type="button" data-mh-next aria-label="Next track">&#9197;</button>
