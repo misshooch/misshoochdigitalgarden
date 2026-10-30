@@ -46,7 +46,7 @@ In `src/plugins/plugins.json` (or the plugin settings screen if your Obsidian pl
 
 
 ## Added in v1.1
-- Homepage ID card and portrait: set `portrait` (default `/img/archive/photo-1.jpg`) and `idStatus` in the plugin settings. Click the portrait to cycle photos.
+- Homepage ID card and portrait: set `idStatus` (and optionally `portrait`) in the plugin settings. Click the portrait to cycle photos.
 - Boot lines under the homepage heading; press `/` anywhere to search.
 - Music player: always in the bottom bar. Set `playlist` as `Title|url; Title|url`, or link an audio file in a note.
 - `/photos/` page shows the photos in every effect.

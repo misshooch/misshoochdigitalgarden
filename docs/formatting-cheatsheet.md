@@ -14,7 +14,6 @@ Write the image embed with one word after the pipe. The word picks the effect.
 | `![[photo.jpg\|cyber]]` | cyan dots on cobalt blue |
 | `![[photo.jpg\|pixel]]` | chunky colour pixels |
 | `![[photo.jpg\|code]]` | the picture rebuilt from hex, binary and symbols, with link lines |
-| `![[photo.jpg\|sigil]]` | dotted photo framed by thin glowing chrome blades |
 
 Visitors can click any effect photo to see the original.
 
