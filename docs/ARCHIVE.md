@@ -51,3 +51,7 @@ In `src/plugins/plugins.json` (or the plugin settings screen if your Obsidian pl
 - Music player: always in the bottom bar. Set `playlist` as `Title|url; Title|url`, or link an audio file in a note.
 - `/photos/` page shows the photos in every effect.
 - Dropdown boxes: write a callout with a minus, `> [!note]- Title`, and it folds.
+
+## Photos and music (v1.2)
+- Photos: any image in a vault folder called `Photos` (published through a note that embeds it) appears on `/photos/` in every effect, and the first one becomes the homepage portrait. Click the portrait to cycle through them. With none, the portrait and photos page stay empty. To use a fixed portrait instead, set the `portrait` plugin setting.
+- Music: put audio files (mp3, m4a, ogg, wav) in `src/site/img/music/`. They join the player's playlist automatically, titled by file name. Links in the `playlist` setting (`Title|url; Title|url`) are added first.
