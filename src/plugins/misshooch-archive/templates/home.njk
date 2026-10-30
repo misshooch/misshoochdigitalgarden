@@ -1,6 +1,6 @@
 {% if not isFallbackIndex and not isAzPage and not isPhotosPage %}
 {% set featuredTag = pluginSettings.featuredTag or "featured" %}
-{% set portraitSrc = pluginSettings.portrait or (archiveGallery.items[0].src if archiveGallery.items.length else "") %}
+{% set portraitSrc = pluginSettings.portrait or (archiveGallery.local[0].src if archiveGallery.local.length else "") %}
 <div class="mh-home">
   <section class="mh-hero">
     {% if portraitSrc %}

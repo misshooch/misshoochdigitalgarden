@@ -158,6 +158,15 @@
   function applyFx(img, word) {
     var nw = img.naturalWidth, nh = img.naturalHeight;
     if (!nw || !nh || img.getAttribute("data-mh-done")) return;
+    // Photos hosted elsewhere (for example a Cloudflare R2 bucket) need a CORS-enabled copy to be read.
+    var remote = /^https?:/i.test(img.currentSrc || img.src) && (img.currentSrc || img.src).indexOf(location.origin) !== 0;
+    if (remote && !img.__cors) {
+      var cc = new Image(); cc.crossOrigin = "anonymous";
+      cc.onload = function () { img.__cors = cc; applyFx(img, word); };
+      cc.src = img.currentSrc || img.src;
+      return;
+    }
+    var drawFrom = img.__cors || img;
     img.setAttribute("data-mh-done", "1");
     var host = img.closest("picture") || img, parent = host.parentNode;
     if (!parent) return;
@@ -165,7 +174,7 @@
     var W = Math.max(320, Math.min(900, Math.round(box || img.width || 600))), H = Math.round(W * nh / nw);
     var sw = 300, sh = Math.max(1, Math.round(300 * nh / nw));
     var src = doc.createElement("canvas"); src.width = sw; src.height = sh;
-    src.getContext("2d", { willReadFrequently: true }).drawImage(img, 0, 0, sw, sh);
+    src.getContext("2d", { willReadFrequently: true }).drawImage(drawFrom, 0, 0, sw, sh);
     var cv = doc.createElement("canvas"); cv.width = W; cv.height = H;
     cv.setAttribute("role", "img");
     cv.setAttribute("aria-label", "Photograph with " + word + " effect. Click to see the original.");

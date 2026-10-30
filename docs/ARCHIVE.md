@@ -58,3 +58,8 @@ In `src/plugins/plugins.json` (or the plugin settings screen if your Obsidian pl
 
 ## Playlist file (v1.3)
 Edit `src/site/playlist.txt`, one song per line as `Title|https://link.mp3`. Lines starting with `#` are ignored. These join the `playlist` setting and any files in `src/site/img/music/`.
+
+## Adding photos the easy way (v1.4)
+- Same-site photos: upload to `src/site/img/photos/` on GitHub. Put the effect before the extension, e.g. `beach.halftone.jpg` (halftone, phosphor, cyber, pixel, code). No effect = shown in every effect.
+- Hosted photos: add a line to `src/site/photos.txt`: `https://link.jpg | effect | caption`. The host needs a CORS rule allowing GET from `*` for effects to work.
+- The first same-site photo becomes the homepage portrait.

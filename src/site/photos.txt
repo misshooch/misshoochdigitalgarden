@@ -1,0 +1,5 @@
+# Photos hosted elsewhere (for example your Cloudflare bucket). One per line:
+#   https://link-to-photo.jpg | effect | caption
+# effect is optional: halftone, phosphor, cyber, pixel or code. Leave it out to show every effect.
+# Example:
+# https://pub-xxxx.r2.dev/beach.jpg | halftone | Beach, winter

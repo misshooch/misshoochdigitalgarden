@@ -5,19 +5,23 @@ permalink: /photos/
 {% set effects = ["halftone", "phosphor", "cyber", "pixel", "code"] %}
 <div class="mh-gal">
   {% if photos.length %}
-  <p class="mh-gal-intro">Each photograph as uploaded, then with each effect. Click any effect to see the original underneath.</p>
+  <p class="mh-gal-intro">Click any photograph to see the original underneath.</p>
   {% for p in photos %}
     <section class="mh-gal-set">
       <h2>{{ p.name }}</h2>
       <div class="mh-gal-row">
         <div class="mh-gal-cell"><img src="{{ p.src }}" alt="{{ p.name }}, as uploaded"><span class="mh-gal-cap">as uploaded</span></div>
-        {% for e in effects %}
-          <div class="mh-gal-cell"><img src="{{ p.src }}" alt="{{ e }}"><span class="mh-gal-cap">|{{ e }}</span></div>
-        {% endfor %}
+        {% if p.effect %}
+          <div class="mh-gal-cell"><img src="{{ p.src }}" alt="{{ p.effect }}"><span class="mh-gal-cap">|{{ p.effect }}</span></div>
+        {% else %}
+          {% for e in effects %}
+            <div class="mh-gal-cell"><img src="{{ p.src }}" alt="{{ e }}"><span class="mh-gal-cap">|{{ e }}</span></div>
+          {% endfor %}
+        {% endif %}
       </div>
     </section>
   {% endfor %}
   {% else %}
-  <p class="mh-gal-intro">No photographs yet. Put images in a vault folder called Photos and publish a note that embeds them.</p>
+  <p class="mh-gal-intro">No photographs yet. Add some in src/site/img/photos/ or list links in src/site/photos.txt.</p>
   {% endif %}
 </div>
