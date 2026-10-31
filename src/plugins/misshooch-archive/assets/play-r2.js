@@ -94,6 +94,7 @@
   function drawSpiral(cv, n) {
     var g = spiralRects(n), W = cv.width, H = cv.height, pad = 8;
     var cs = getComputedStyle(cv), acc = cs.getPropertyValue("--mh-accent").trim() || "#5dff8a", dim = cs.getPropertyValue("--mh-dim").trim() || "#5f9e6f", fg = cs.getPropertyValue("--mh-fg").trim() || "#bff5ca";
+    if (root.getAttribute("data-skin") === "cyber") { acc = "#4f8dff"; dim = "#4a6fc4"; fg = "#d6e4ff"; }
     var k = Math.min((W - pad * 2) / (g.x1 - g.x0), (H - pad * 2) / (g.y1 - g.y0));
     var ox = (W - (g.x1 - g.x0) * k) / 2 - g.x0 * k, oy = (H - (g.y1 - g.y0) * k) / 2 - g.y0 * k;
     var ctx = cv.getContext("2d"); ctx.clearRect(0, 0, W, H); ctx.lineWidth = 1; ctx.strokeStyle = dim;
