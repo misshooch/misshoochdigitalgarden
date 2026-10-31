@@ -8,7 +8,7 @@
 (function () {
   "use strict";
   var doc = document, root = doc.documentElement;
-  var MODES = ["bars", "wave", "radial", "spiral", "rings", "spectrogram"];
+  var MODES = ["bars", "wave", "radial", "spiral", "rings", "spectrogram", "pulse", "ridges", "arcs", "loops"];
   function el(t, c, h) { var e = doc.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function css(n, f) { var v = getComputedStyle(root).getPropertyValue(n).trim(); return v || f; }
   var THEMES = [
@@ -19,6 +19,10 @@
     { n: "gold", ac: "#ffd700", hot: "#ffffff", fg: "#fff4c2", dim: "#8a7420", bg: "#0a0800" },
     { n: "rainbow" },
     { n: "viridis", ac: "#5ee67a", hot: "#c8e84a", fg: "#d8f5e0", dim: "#1f8a7a", bg: "#03050f", map: true },
+    { n: "oscilloscope", ac: "#3de6ff", hot: "#ffffff", fg: "#d8fbff", dim: "#17788a", bg: "#000508" },
+    { n: "lightpaint", ac: "#2f8bff", hot: "#7fe7ff", fg: "#cfe6ff", dim: "#123a7a", bg: "#00030a" },
+    { n: "bone", ac: "#e8dcb0", hot: "#ffffff", fg: "#f2ead0", dim: "#7d7355", bg: "#050505" },
+    { n: "mono", ac: "#ffffff", hot: "#9a9a9a", fg: "#ffffff", dim: "#666666", bg: "#000000" },
     { n: "paper", ac: "#111111", hot: "#d6001c", fg: "#111111", dim: "#777777", bg: "#f4efe4" }
   ];
   var theme = 0; try { theme = Math.min(THEMES.length - 1, parseInt(localStorage.getItem("mh-viz-theme"), 10) || 0); } catch (e) {}
@@ -26,7 +30,7 @@
   function base() { return { bg: css("--mh-bg", "#040905"), fg: css("--mh-fg", "#bff5ca"), ac: css("--mh-accent", "#5dff8a"), hot: css("--mh-hot", "#ff6f91"), dim: css("--mh-dim", "#5f9e6f") }; }
   function calm() { return root.hasAttribute("data-calm") || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
 
-  var fbuf = null, tbuf = null, sm = [], t0 = Date.now();
+  var rows = [], fbuf = null, tbuf = null, sm = [], t0 = Date.now();
   function sample() {
     var A = window.mhAudio, an = A && A.analyser(), live = !!(A && A.live() && an), playing = !!(A && A.playing());
     var N = 64, f = new Array(N), w = new Array(128), i;
@@ -57,12 +61,60 @@
       for (var k = 0; k < N2; k++) { ctx.fillStyle = viridis(Math.pow(d.f[k], 1.25) * 0.95); ctx.fillRect(W - step, H - (k + 1) * H / N2, step, Math.ceil(H / N2) + 1); }
       return;
     }
+    if (mode === "loops") {
+      // Light painting: a looping line drawn from the sound, with trails that slowly fade.
+      var first = lastMode !== mode; lastMode = mode;
+      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = first ? 1 : (calm() ? 0.3 : 0.09); ctx.fillStyle = p.bg; ctx.fillRect(0, 0, W, H);
+      var cx = W / 2, cy = H / 2, f3 = d.f, lo = (f3[1] + f3[2] + f3[3]) / 3, mid = (f3[10] + f3[14] + f3[18]) / 3, hi = (f3[30] + f3[40]) / 2, Rl = Math.min(W, H) * 0.42, ph = t * 0.35;
+      ctx.globalCompositeOperation = "lighter"; ctx.lineWidth = Math.max(1, W / 700); ctx.shadowColor = p.ac; ctx.shadowBlur = 8;
+      for (var L = 0; L < 3; L++) {
+        ctx.strokeStyle = L === 1 ? p.hot : p.ac; ctx.globalAlpha = 0.55; ctx.beginPath();
+        for (var q = 0; q <= 220; q++) {
+          var u = q / 220 * Math.PI * 2, wv = d.w[(q * 128 / 220 | 0) % 128] || 0;
+          var rr = Rl * (0.55 + 0.25 * Math.sin(u * (3 + L) + ph) + wv * 0.5 + lo * 0.3);
+          var xx = cx + Math.cos(u * (2 + L) + ph * (L + 1)) * rr * (1 + mid * 0.5), yy = cy + Math.sin(u * (3 + L) - ph) * rr * (1 + hi * 0.8);
+          q ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy);
+        }
+        ctx.stroke();
+      }
+      ctx.shadowBlur = 0; ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1;
+      return;
+    }
     lastMode = mode;
     ctx.globalAlpha = 1; ctx.fillStyle = p.bg; ctx.fillRect(0, 0, W, H);
     var f = d.f, N = f.length, cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2, i;
     var bass = (f[1] + f[2] + f[3] + f[4]) / 4;
     ctx.lineWidth = Math.max(1.5, W / 400);
-    if (mode === "bars") {
+    if (mode === "pulse") {
+      // A waveform with swelling knots along a line, inside broken rings that open and close.
+      ctx.shadowColor = p.ac; ctx.shadowBlur = 10; ctx.strokeStyle = p.fg; ctx.globalAlpha = 0.9;
+      for (var sg = -1; sg <= 1; sg += 2) {
+        ctx.beginPath();
+        for (i = 0; i <= 160; i++) { var dist = Math.abs(i / 160 - 0.5) * 2, kk = Math.min(N - 1, Math.floor(Math.pow(dist, 1.2) * 40)), amp = f[kk] * H * 0.2 * (0.35 + dist), bump = Math.abs(Math.sin(i * 0.5)) * amp + (d.w[i % 128] || 0) * H * 0.02; var px = i / 160 * W; i ? ctx.lineTo(px, cy + sg * bump) : ctx.moveTo(px, cy + sg * bump); }
+        ctx.stroke();
+      }
+      for (i = 0; i < 6; i++) { var e2 = f[2 + i * 4] || 0, r2 = R * (0.18 + i * 0.13) * (1 + e2 * 0.18), a0 = t * (0.25 + i * 0.07) * (i % 2 ? -1 : 1) + i, gap = 0.5 + (1 - e2) * 1.3; ctx.strokeStyle = i % 2 ? p.ac : p.fg; ctx.globalAlpha = 0.45 + e2 * 0.5; ctx.beginPath(); ctx.arc(cx, cy, r2, a0, a0 + Math.PI * 2 - gap); ctx.stroke(); }
+      ctx.shadowBlur = 0;
+    } else if (mode === "ridges") {
+      // Columns of dots that bend with each moment of sound, so time becomes a bumpy profile.
+      rows.push(d.f.slice()); if (rows.length > 60) rows.shift();
+      var gx = W * 0.8 / 60, base = W * 0.12, dots = 90;
+      ctx.fillStyle = p.fg;
+      for (var c = 0; c < rows.length; c++) {
+        var row = rows[c], x0 = base + (c + 60 - rows.length) * gx;
+        ctx.globalAlpha = 0.35 + 0.65 * c / rows.length;
+        for (var k2 = 0; k2 < dots; k2++) { var v2 = row[Math.floor(Math.pow(1 - k2 / dots, 1.5) * (N - 1))] || 0, yy2 = H * 0.05 + k2 / dots * H * 0.9, sh = Math.sin(k2 * 0.35 + c * 0.2) * 3, edge = Math.sin(k2 / dots * Math.PI); ctx.fillRect(x0 + v2 * gx * 9 * edge + sh - 1, yy2 - 1, Math.max(2, W / 450), Math.max(2, W / 450)); }
+      }
+    } else if (mode === "arcs") {
+      // Hanging curves rising to marked peaks, one per band of sound.
+      var M = 11, pk = [];
+      for (i = 0; i < M; i++) { var vv = f[Math.floor(1 + i / M * 40)] || 0, ax = W * (0.06 + 0.88 * i / (M - 1)), ah = H * (0.12 + vv * 0.8); pk.push([ax, H - ah]); }
+      ctx.lineWidth = Math.max(1, W / 900); ctx.strokeStyle = p.ac;
+      for (i = 0; i < M; i++) for (var fan = 1; fan <= 8; fan++) { var sp = fan * W * 0.012, A = pk[i]; ctx.globalAlpha = 0.18 + 0.05 * (9 - fan); ctx.beginPath(); ctx.moveTo(A[0] - sp * 3, H); ctx.quadraticCurveTo(A[0] - sp * 0.4, A[1] + (H - A[1]) * 0.35, A[0], A[1]); ctx.quadraticCurveTo(A[0] + sp * 0.4, A[1] + (H - A[1]) * 0.35, A[0] + sp * 3, H); ctx.stroke(); }
+      ctx.globalAlpha = 0.8; ctx.strokeStyle = p.hot; ctx.beginPath(); pk.forEach(function (a, n) { n ? ctx.lineTo(a[0], a[1]) : ctx.moveTo(a[0], a[1]); }); ctx.stroke();
+      ctx.strokeStyle = p.fg; ctx.globalAlpha = 1;
+      pk.forEach(function (a) { var m = Math.max(5, W / 120); ctx.beginPath(); ctx.moveTo(a[0] - m, a[1]); ctx.lineTo(a[0] + m, a[1]); ctx.moveTo(a[0], a[1] - m); ctx.lineTo(a[0], a[1] + m); ctx.stroke(); });
+    } else if (mode === "bars") {
       var bw = W / N;
       for (i = 0; i < N; i++) { var h = f[i] * H * 0.9; ctx.fillStyle = i % 5 === 0 ? p.hot : p.ac; ctx.globalAlpha = 0.45 + f[i] * 0.55; ctx.fillRect(i * bw + 1, H - h, bw - 2, h); ctx.fillRect(i * bw + 1, H - h - 4, bw - 2, 2); }
     } else if (mode === "wave") {
