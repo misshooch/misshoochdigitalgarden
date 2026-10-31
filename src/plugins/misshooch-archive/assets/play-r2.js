@@ -54,7 +54,7 @@
   }
   function idcard(c) {
     var d = parse(c, "idcard"), p = kv(d.lines), name = d.title || "UNNAMED";
-    var signal = "SIGNAL: ONLINE", note = "AUTHORIZATION GRANTED TO THE ABOVE USER TO ENTER, WANDER AND GET LOST.", color = "", rows = "";
+    var signal = "SIGNAL: ONLINE", note = "AUTHORISATION GRANTED TO THE AUTHOR. BUT WHAT IS AN AUTHOR? AND WHO PERMITS THEM TO SPEAK?", color = "", rows = "";
     p.pairs.forEach(function (kvp) {
       var k = kvp[0].toLowerCase();
       if (k === "signal") signal = kvp[1];

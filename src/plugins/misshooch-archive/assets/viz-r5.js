@@ -8,25 +8,18 @@
 (function () {
   "use strict";
   var doc = document, root = doc.documentElement;
-  var MODES = ["bars", "wave", "radial", "spiral", "rings", "spectrogram", "pulse", "ridges", "arcs", "loops"];
+  var MODES = ["pulse", "loops", "ridges", "text", "arcs", "spiral", "radial", "spectrogram"];
   function el(t, c, h) { var e = doc.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function css(n, f) { var v = getComputedStyle(root).getPropertyValue(n).trim(); return v || f; }
   var THEMES = [
-    { n: "skin" },
-    { n: "sunset", ac: "#ff9f1c", hot: "#ff2e63", fg: "#ffe5b4", dim: "#b5651d", bg: "#12040a" },
-    { n: "ice", ac: "#7df9ff", hot: "#c4a1ff", fg: "#e0f7ff", dim: "#4a7c99", bg: "#030a14" },
-    { n: "candy", ac: "#ff5fd2", hot: "#ffe14d", fg: "#ffe6f7", dim: "#a1428a", bg: "#10041a" },
-    { n: "gold", ac: "#ffd700", hot: "#ffffff", fg: "#fff4c2", dim: "#8a7420", bg: "#0a0800" },
-    { n: "rainbow" },
-    { n: "viridis", ac: "#5ee67a", hot: "#c8e84a", fg: "#d8f5e0", dim: "#1f8a7a", bg: "#03050f", map: true },
+    { n: "viridis", ac: "#5ee67a", hot: "#c8e84a", fg: "#d8f5e0", dim: "#1f8a7a", bg: "#03050f" },
     { n: "oscilloscope", ac: "#3de6ff", hot: "#ffffff", fg: "#d8fbff", dim: "#17788a", bg: "#000508" },
     { n: "lightpaint", ac: "#2f8bff", hot: "#7fe7ff", fg: "#cfe6ff", dim: "#123a7a", bg: "#00030a" },
     { n: "bone", ac: "#e8dcb0", hot: "#ffffff", fg: "#f2ead0", dim: "#7d7355", bg: "#050505" },
-    { n: "mono", ac: "#ffffff", hot: "#9a9a9a", fg: "#ffffff", dim: "#666666", bg: "#000000" },
-    { n: "paper", ac: "#111111", hot: "#d6001c", fg: "#111111", dim: "#777777", bg: "#f4efe4" }
+    { n: "mono", ac: "#ffffff", hot: "#9a9a9a", fg: "#ffffff", dim: "#666666", bg: "#000000" }
   ];
   var theme = 0; try { theme = Math.min(THEMES.length - 1, parseInt(localStorage.getItem("mh-viz-theme"), 10) || 0); } catch (e) {}
-  function pal() { var T = THEMES[theme]; if (T.ac) return T; if (T.n === "rainbow") { var h = (Date.now() / 20) % 360; return { bg: "#050505", fg: "#fff", dim: "#888", ac: "hsl(" + h + ",90%,60%)", hot: "hsl(" + ((h + 150) % 360) + ",90%,60%)" }; } return base(); }
+  function pal() { return THEMES[theme]; }
   function base() { return { bg: css("--mh-bg", "#040905"), fg: css("--mh-fg", "#bff5ca"), ac: css("--mh-accent", "#5dff8a"), hot: css("--mh-hot", "#ff6f91"), dim: css("--mh-dim", "#5f9e6f") }; }
   function calm() { return root.hasAttribute("data-calm") || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
 
@@ -95,11 +88,16 @@
       }
       for (i = 0; i < 6; i++) { var e2 = f[2 + i * 4] || 0, r2 = R * (0.18 + i * 0.13) * (1 + e2 * 0.18), a0 = t * (0.25 + i * 0.07) * (i % 2 ? -1 : 1) + i, gap = 0.5 + (1 - e2) * 1.3; ctx.strokeStyle = i % 2 ? p.ac : p.fg; ctx.globalAlpha = 0.45 + e2 * 0.5; ctx.beginPath(); ctx.arc(cx, cy, r2, a0, a0 + Math.PI * 2 - gap); ctx.stroke(); }
       ctx.shadowBlur = 0;
-    } else if (mode === "ridges") {
+    } else if (mode === "ridges" || mode === "text") {
       // Columns of dots that bend with each moment of sound, so time becomes a bumpy profile.
       rows.push(d.f.slice()); if (rows.length > 60) rows.shift();
       var gx = W * 0.8 / 60, base = W * 0.12, dots = 90;
-      ctx.fillStyle = p.fg;
+      if (mode === "text") {
+        var lines = (window.mhVizText && window.mhVizText.length) ? window.mhVizText : ["STILL HERE?", "ARE YOU EXPANDING YOUR MIND?", "NOTHING HERE IS FINISHED"], fs = Math.max(12, Math.round(H / 26)), off = (t * fs * 1.2) % (fs * 2);
+        ctx.font = fs + "px " + css("--mh-mono", "monospace"); ctx.fillStyle = p.dim; ctx.globalAlpha = 0.85; ctx.textBaseline = "top";
+        for (var ty = -2, ln = 0; ty * fs * 1.4 < H; ty++, ln++) ctx.fillText(lines[ln % lines.length].toUpperCase(), W * 0.03, ty * fs * 1.4 + (off % (fs * 1.4)));
+        ctx.fillStyle = p.ac;
+      } else ctx.fillStyle = p.fg;
       for (var c = 0; c < rows.length; c++) {
         var row = rows[c], x0 = base + (c + 60 - rows.length) * gx;
         ctx.globalAlpha = 0.35 + 0.65 * c / rows.length;
@@ -165,6 +163,7 @@
   function setup() {
     Array.prototype.slice.call(doc.querySelectorAll('.callout[data-callout="visualiser"], .callout[data-callout="viz"]')).forEach(function (c) {
       if (c.getAttribute("data-mh-done")) return; c.setAttribute("data-mh-done", "1");
+      var tx = (c.querySelector(".callout-content") || {}).innerText; if (tx && tx.trim()) window.mhVizText = tx.split(/\n+/).map(function (z) { return z.trim(); }).filter(Boolean);
       var h = el("div", "mh-viz-host"); c.parentNode.replaceChild(h, c); make(h, false);
     });
     var pl = doc.getElementById("mh-player"); if (!pl || pl.querySelector(".mh-viz-open")) return;
