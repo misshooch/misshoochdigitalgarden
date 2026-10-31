@@ -9,8 +9,11 @@
   "use strict";
   var doc = document, root = doc.documentElement;
   var MODES = ["pulse", "loops", "ridges", "text", "arcs", "spiral", "radial", "spectrogram"];
+  function esc(z) { return String(z).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
   function el(t, c, h) { var e = doc.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function css(n, f) { var v = getComputedStyle(root).getPropertyValue(n).trim(); return v || f; }
+  var PASSAGE = "I am because you are. Not simply because you recognise me, love me, or bear witness to my existence, but because the very possibility of my being a self depends upon the existence of another. We are not born into the world as complete and autonomous subjects who subsequently enter into relationships; rather, it is through these relationships that we come to exist as ourselves. The other is not an addition to the self but one of its fundamental conditions. Descartes' I think, therefore I am establishes the certainty of consciousness, but it cannot account for the emergence of the consciousness that thinks. Hegel understood that self-consciousness requires recognition by another consciousness, and herein lies the extraordinary contradiction of human existence: to become myself, I must encounter someone who is not me. My independence is made possible by my dependence; my individuality is constituted through the very thing that distinguishes me from another. Lacan takes this contradiction further, suggesting that the ego is born through identification with an image outside itself, that what we experience as our most intimate and indivisible identity is already inhabited by something foreign. We are, from the beginning, strangers to ourselves. Merleau-Ponty reveals that this entanglement is not confined to consciousness or language but extends into the body itself. We do not merely observe the suffering, pleasure, movement or tenderness of another; we experience their gestures through the possibilities of our own flesh. The body reaches beyond the apparent limits of its skin. Derrida's philosophy of difference makes the separation between self and other more profound still: identity cannot exist without that which it excludes, and the meaning of the self is forever dependent upon what lies beyond it. In Becoming Others, Siri Hustvedt approaches this extraordinary intimacy through embodiment, imagination and intersubjectivity, exploring the ways another person's experience can enter our own without ever becoming entirely ours. We are capable of feeling with another, of imaginatively inhabiting another life, of being transformed by a consciousness we can never fully possess. This is perhaps the most beautiful and unbearable paradox of intimacy: the person who makes me more completely myself must always remain someone other than me. To love another is not to abolish the distance between us, but to discover that this distance is precisely what makes our encounter possible. I cannot become you, and yet I cannot remain entirely who I was before knowing you. Something of you enters the architecture of my consciousness; your existence changes the conditions of my own. Even in your absence, I carry the alterations produced by your presence. The self is not a sealed interior, untouched by the world, but an accumulation of encounters, recognitions, losses, desires and transformations. We are continually becoming through one another, and every intimacy leaves us irreversibly changed. To say I am because you are is therefore not merely to make a declaration of affection. It is to acknowledge something far more radical: that the boundaries of my existence do not coincide with the boundaries of my body, that what I call myself has always been constituted through what is not myself, and that to encounter another person is to risk the transformation of one's very being. I do not love you because I am incomplete and require you to make me whole. I love you because your existence reveals that I was never separate from the world to begin with. You are not mine, and I am not yours, but something of who I am exists only because you have existed. The tragedy and the miracle are the same: we can never entirely belong to one another, and yet we can never entirely disentangle ourselves from those we have loved.";
+  var SENTENCES = PASSAGE.match(/[^.;:?!]+[.;:?!]?/g).map(function (z) { return z.trim(); }).filter(Boolean);
   var THEMES = [
     { n: "viridis", ac: "#5ee67a", hot: "#c8e84a", fg: "#d8f5e0", dim: "#1f8a7a", bg: "#03050f" },
     { n: "oscilloscope", ac: "#3de6ff", hot: "#ffffff", fg: "#d8fbff", dim: "#17788a", bg: "#000508" },
@@ -57,7 +60,7 @@
     if (mode === "loops") {
       // Light painting: a looping line drawn from the sound, with trails that slowly fade.
       var first = lastMode !== mode; lastMode = mode;
-      ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = first ? 1 : (calm() ? 0.3 : 0.09); ctx.fillStyle = p.bg; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "destination-out"; ctx.globalAlpha = first ? 1 : (calm() ? 0.3 : 0.09); ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
       var cx = W / 2, cy = H / 2, f3 = d.f, lo = (f3[1] + f3[2] + f3[3]) / 3, mid = (f3[10] + f3[14] + f3[18]) / 3, hi = (f3[30] + f3[40]) / 2, Rl = Math.min(W, H) * 0.42, ph = t * 0.35;
       ctx.globalCompositeOperation = "lighter"; ctx.lineWidth = Math.max(1, W / 700); ctx.shadowColor = p.ac; ctx.shadowBlur = 8;
       for (var L = 0; L < 3; L++) {
@@ -74,7 +77,7 @@
       return;
     }
     lastMode = mode;
-    ctx.globalAlpha = 1; ctx.fillStyle = p.bg; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "source-over"; ctx.globalAlpha = 1; ctx.clearRect(0, 0, W, H);
     var f = d.f, N = f.length, cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2, i;
     var bass = (f[1] + f[2] + f[3] + f[4]) / 4;
     ctx.lineWidth = Math.max(1.5, W / 400);
@@ -93,7 +96,7 @@
       rows.push(d.f.slice()); if (rows.length > 60) rows.shift();
       var gx = W * 0.8 / 60, base = W * 0.12, dots = 90;
       if (mode === "text") {
-        var lines = (window.mhVizText && window.mhVizText.length) ? window.mhVizText : ["STILL HERE?", "ARE YOU EXPANDING YOUR MIND?", "NOTHING HERE IS FINISHED"], fs = Math.max(12, Math.round(H / 26)), off = (t * fs * 1.2) % (fs * 2);
+        var lines = (window.mhVizText && window.mhVizText.length) ? window.mhVizText : SENTENCES, fs = Math.max(12, Math.round(H / 26)), off = (t * fs * 1.2) % (fs * 2);
         ctx.font = fs + "px " + css("--mh-mono", "monospace"); ctx.fillStyle = p.dim; ctx.globalAlpha = 0.85; ctx.textBaseline = "top";
         for (var ty = -2, ln = 0; ty * fs * 1.4 < H; ty++, ln++) ctx.fillText(lines[ln % lines.length].toUpperCase(), W * 0.03, ty * fs * 1.4 + (off % (fs * 1.4)));
         ctx.fillStyle = p.ac;
@@ -142,6 +145,9 @@
     var cb = el("button", "mh-viz-mode", THEMES[theme].n); cb.type = "button"; cb.title = "Change colours";
     cb.addEventListener("click", function () { theme = (theme + 1) % THEMES.length; cb.textContent = THEMES[theme].n; try { localStorage.setItem("mh-viz-theme", theme); } catch (e) {} });
     bar.appendChild(btn); bar.appendChild(cb); bar.appendChild(name); bar.appendChild(note);
+    var bg = el("div", "mh-viz-bgtext"), inner = el("div", "mh-viz-bgin");
+    var txt = (window.mhVizText && window.mhVizText.length) ? window.mhVizText.join(" ") : PASSAGE;
+    inner.innerHTML = "<p>" + esc(txt) + "</p><p>" + esc(txt) + "</p>"; bg.appendChild(inner); wrap.appendChild(bg);
     wrap.appendChild(cv); wrap.appendChild(bar); host.appendChild(wrap);
     var raf = 0, vis = !big, io;
     function size() { var r = wrap.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.max(100, Math.floor(r.width * dpr)); cv.height = Math.max(80, Math.floor((r.height - 28) * dpr)); }
@@ -150,7 +156,9 @@
       var d = sample(), A = window.mhAudio;
       name.textContent = A ? A.title() : "no player";
       note.textContent = d.live ? (d.playing ? "live" : "paused") : (d.playing ? "simulated" : "idle");
-      draw(cv.getContext("2d"), cv.width, cv.height, MODES[mode], d, pal(), (Date.now() - t0) / 1000);
+      var pp = pal(); wrap.style.background = pp.bg; bg.style.color = pp.dim; bg.style.display = (MODES[mode] === "spectrogram" || MODES[mode] === "text") ? "none" : "";
+      bg.classList.toggle("still", calm());
+      draw(cv.getContext("2d"), cv.width, cv.height, MODES[mode], d, pp, (Date.now() - t0) / 1000);
       if (!calm() || !d.live) raf = requestAnimationFrame(frame); else setTimeout(function () { if (!raf && vis) raf = requestAnimationFrame(frame); }, 120);
     }
     function start() { if (!raf) raf = requestAnimationFrame(frame); }

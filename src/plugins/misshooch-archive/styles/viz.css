@@ -8,3 +8,11 @@
 .mh-viz-big { position: absolute; inset: 0; height: auto; margin: 0; border: 0; }
 .mh-viz-x { position: absolute; top: 10px; right: 10px; z-index: 2; font-size: 1.4rem; padding: 2px 12px; }
 @media (max-width: 700px) { .mh-viz { height: 220px; } }
+.mh-viz-bgtext { position: absolute; left: 0; right: 0; top: 0; bottom: 28px; overflow: hidden; opacity: 0.42; pointer-events: none; font-family: var(--mh-mono); font-size: 12px; line-height: 1.7; text-align: justify; padding: 0 14px; }
+.mh-viz-big .mh-viz-bgtext { font-size: clamp(13px, 1.5vw, 18px); padding: 0 6vw; }
+.mh-viz-bgin { animation: mh-viz-scroll 420s linear infinite; }
+.mh-viz-bgin p { margin: 0 0 1.7em; }
+.mh-viz-bgtext.still .mh-viz-bgin { animation-play-state: paused; }
+@keyframes mh-viz-scroll { to { transform: translateY(-50%); } }
+.mh-viz-cv { position: relative; z-index: 1; }
+.mh-viz-bar { position: relative; z-index: 1; background: var(--mh-bg); }
