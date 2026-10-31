@@ -38,3 +38,21 @@ Visitors can click any effect photo to see the original.
 - Bandcamp, SoundCloud, Spotify and YouTube embeds (an `<iframe>` pasted into the note) get a framed player look.
 - Music starts only when a visitor presses play.
 - Keep audio files small. Large files count against free hosting limits.
+
+## Play (callouts that become little objects)
+
+Write a callout with one of these names. Each line inside is plain text. A photo embed inside is used as the picture.
+
+| You type | You get |
+|---|---|
+| `> [!idcard] Your Name` then `status: STILL HERE`, `type: human`, `color: #ff66cc`, `note: any text` | your own ID card with a photo, a barcode made from your name, and any lines you add. `color` and `signal` are optional |
+| `> [!fibonacci] 12` | a golden spiral of 12 squares, labelled, with the sequence and the ratio underneath |
+| `> [!fibpoem] Title` then one line per row | a poem whose lines are counted; a line turns green when its word count is a Fibonacci number (1, 1, 2, 3, 5, 8, 13) |
+| `> [!polaroid] Caption` then a photo | a tilted instant photo |
+| `> [!redacted] file 7` then lines of text | black bars over the words. Click to reveal |
+| `> [!oracle] Ask me` then one answer per line | a button that draws a random line and types it out |
+| `> [!progress] memory` then `70` | `[#######---] 70%` |
+| `> [!countdown] Christmas` then `2026-12-25` | a live count of days, hours and seconds |
+| `> [!terminal] boot` then lines | green text typed out as the reader scrolls to it |
+
+If a name is misspelled, the callout simply shows as a normal box.

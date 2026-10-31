@@ -66,3 +66,6 @@ Edit `src/site/playlist.txt`, one song per line as `Title|https://link.mp3`. Lin
 
 ## Photos page (v1.5)
 `/photos/` shows one tile for every image Obsidian has uploaded (plus `src/site/img/photos/` and `src/site/photos.txt`). Each starts unaffected; click it to cycle through the effects.
+
+## Play components (v1.6)
+`assets/play-r1.js` and `styles/play.css` turn callouts named idcard, fibonacci, fibpoem, polaroid, redacted, oracle, progress, countdown and terminal into interactive blocks. See `docs/formatting-cheatsheet.md`.

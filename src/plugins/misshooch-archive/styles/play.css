@@ -1,0 +1,61 @@
+/* Miss Hooch Archive: play components (ID cards, spirals, polaroids and friends) */
+.mh-play { --c: var(--mh-play, var(--mh-accent)); margin: 1.6em 0; color: var(--mh-fg); font-family: var(--mh-mono); max-width: 100%; }
+.mh-play-t { font-family: var(--mh-ui); letter-spacing: .06em; color: var(--c); margin: 0 0 .4em; }
+.mh-play-hint { font: 11.5px/1.5 var(--mh-mono); color: var(--mh-dim); margin: .6em 0 0; }
+
+/* ID card */
+.mh-id { max-width: 420px; border: 1px solid var(--c); background: var(--mh-panel); padding: 8px; box-shadow: 5px 5px 0 var(--mh-line); }
+.mh-id-h { display: flex; justify-content: space-between; gap: 8px; background: var(--c); color: #031006; font: 12px/1 var(--mh-mono); letter-spacing: .12em; padding: 5px 8px; text-transform: uppercase; }
+.mh-id-b { display: flex; gap: 12px; padding: 10px 2px; }
+.mh-id-ph { flex: 0 0 96px; width: 96px; height: 120px; border: 1px solid var(--c); background: #000; display: flex; align-items: center; justify-content: center; font: 44px var(--mh-ui); color: var(--c); overflow: hidden; }
+.mh-id-ph img, .mh-id-ph picture { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mh-id-ph img { filter: grayscale(1) contrast(1.15); mix-blend-mode: normal; }
+.mh-id dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 12.5px; align-content: start; min-width: 0; }
+.mh-id dt { color: var(--mh-dim); letter-spacing: .08em; }
+.mh-id dd { margin: 0; color: var(--mh-fg); overflow-wrap: anywhere; }
+.mh-id-t { margin: 4px 2px 8px; font-size: 10.5px; letter-spacing: .06em; color: var(--mh-dim); text-transform: uppercase; }
+.mh-id-bars { display: block; width: 100%; height: 26px; color: var(--c); opacity: .9; }
+.mh-id-no { font-size: 10.5px; letter-spacing: .2em; color: var(--c); margin-top: 4px; }
+html[data-skin="cyber"] .mh-id { border: 2px solid #fff; outline: 1px solid #8fb0e6; border-radius: 16px; background: linear-gradient(#fff, #dbe8ff); box-shadow: 0 4px 16px rgba(31,91,255,.28); color: #0b2a6b; }
+html[data-skin="cyber"] .mh-id-h { background: linear-gradient(#6fa2ff, #1f5bff); color: #fff; border-radius: 10px; }
+html[data-skin="cyber"] .mh-id dd { color: #0b2a6b; } html[data-skin="cyber"] .mh-id dt, html[data-skin="cyber"] .mh-id-t { color: #3a64b8; }
+
+/* Fibonacci spiral and poem */
+.mh-fib canvas { display: block; width: 100%; max-width: 640px; height: auto; border: 1px solid var(--mh-line); background: #000; }
+html[data-skin="cyber"] .mh-fib canvas { background: #06163a; border-radius: 12px; }
+.mh-fib-seq { font-size: 12.5px; color: var(--mh-fg); margin: .5em 0 0; } .mh-fib-seq span { color: var(--mh-dim); }
+.mh-fibpoem { text-align: center; border-left: 2px solid var(--mh-line); padding: 6px 0 6px 12px; }
+.mh-fp-row { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin: .15em 0; line-height: 1.25; font-family: var(--mh-read); }
+.mh-fp-n { font: 10px var(--mh-mono); color: var(--mh-dim); min-width: 3.2em; text-align: right; letter-spacing: .06em; }
+.mh-fp-row.is-fib .mh-fp-n { color: var(--mh-accent); }
+.mh-fp-l { text-align: left; }
+
+/* polaroid */
+.mh-pol { display: inline-block; vertical-align: top; width: 250px; max-width: 100%; margin: 14px 12px 20px 0; padding: 10px 10px 8px; background: #f4f1ea; color: #222; box-shadow: 0 6px 14px rgba(0,0,0,.45); transform: rotate(var(--tilt, 0deg)); transition: transform .2s; }
+.mh-pol:hover { transform: rotate(0) scale(1.03); }
+.mh-pol-ph { background: #111; aspect-ratio: 1 / 1; overflow: hidden; } .mh-pol-ph img, .mh-pol-ph picture { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mh-pol figcaption { margin-top: 8px; font: 13px/1.3 var(--mh-mono); text-align: center; min-height: 1.3em; }
+
+/* redacted */
+.mh-red { border: 1px solid var(--mh-hot); padding: 10px 12px; cursor: pointer; background: var(--mh-panel); }
+.mh-red-h { font: 11px var(--mh-mono); letter-spacing: .2em; color: var(--mh-hot); margin-bottom: 6px; } .mh-red-h small { color: var(--mh-dim); letter-spacing: .06em; margin-left: 8px; }
+.mh-red p { margin: .3em 0; }
+.mh-bar { background: #000; color: transparent; border-radius: 2px; transition: color .25s, background .25s; }
+.mh-red.is-open .mh-bar, .mh-red:hover .mh-bar { background: transparent; color: var(--mh-fg); }
+.mh-red:not(.is-open):hover .mh-bar { background: rgba(0,0,0,.55); color: transparent; }
+.mh-red.is-open .mh-bar { background: transparent; color: var(--mh-fg); }
+
+/* oracle, progress, countdown, terminal */
+.mh-orc { border: 1px dashed var(--c); padding: 12px 14px; background: var(--mh-panel); }
+.mh-orc-q { font-family: var(--mh-ui); font-size: 1.4rem; color: var(--c); margin: 0 0 .4em; }
+.mh-orc-a { min-height: 2.6em; margin: 0 0 .6em; font-family: var(--mh-read); font-size: 1.15em; }
+.mh-orc-b, .mh-play button { font: 12px var(--mh-mono); letter-spacing: .1em; color: var(--c); background: transparent; border: 1px solid var(--c); padding: 3px 12px; cursor: pointer; }
+.mh-orc-b:hover { background: var(--c); color: #031006; }
+.mh-prog, .mh-cd { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; border: 1px solid var(--mh-line); padding: 8px 12px; background: var(--mh-panel); }
+.mh-prog code, .mh-cd code { color: var(--c); font-size: 1.05em; background: none; letter-spacing: .06em; }
+.mh-prog small { flex-basis: 100%; color: var(--mh-dim); }
+.mh-term { border: 1px solid var(--mh-line); background: #000; }
+.mh-term-h { font: 11px var(--mh-mono); letter-spacing: .14em; color: var(--mh-dim); padding: 4px 10px; border-bottom: 1px solid var(--mh-line); text-transform: uppercase; }
+.mh-term pre { margin: 0; padding: 10px 12px; color: var(--c); font: 13px/1.55 var(--mh-mono); white-space: pre-wrap; background: transparent; min-height: 3em; text-shadow: var(--mh-glow); }
+@media (max-width: 600px) { .mh-id-ph { flex-basis: 80px; width: 80px; height: 100px; } .mh-pol { width: 100%; max-width: 280px; } }
+html[data-calm] .mh-pol { transition: none; }
