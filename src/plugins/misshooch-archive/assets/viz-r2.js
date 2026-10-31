@@ -11,7 +11,18 @@
   var MODES = ["bars", "wave", "radial", "spiral", "rings"];
   function el(t, c, h) { var e = doc.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function css(n, f) { var v = getComputedStyle(root).getPropertyValue(n).trim(); return v || f; }
-  function pal() { return { bg: css("--mh-bg", "#040905"), fg: css("--mh-fg", "#bff5ca"), ac: css("--mh-accent", "#5dff8a"), hot: css("--mh-hot", "#ff6f91"), dim: css("--mh-dim", "#5f9e6f") }; }
+  var THEMES = [
+    { n: "skin" },
+    { n: "sunset", ac: "#ff9f1c", hot: "#ff2e63", fg: "#ffe5b4", dim: "#b5651d", bg: "#12040a" },
+    { n: "ice", ac: "#7df9ff", hot: "#c4a1ff", fg: "#e0f7ff", dim: "#4a7c99", bg: "#030a14" },
+    { n: "candy", ac: "#ff5fd2", hot: "#ffe14d", fg: "#ffe6f7", dim: "#a1428a", bg: "#10041a" },
+    { n: "gold", ac: "#ffd700", hot: "#ffffff", fg: "#fff4c2", dim: "#8a7420", bg: "#0a0800" },
+    { n: "rainbow" },
+    { n: "paper", ac: "#111111", hot: "#d6001c", fg: "#111111", dim: "#777777", bg: "#f4efe4" }
+  ];
+  var theme = 0; try { theme = Math.min(THEMES.length - 1, parseInt(localStorage.getItem("mh-viz-theme"), 10) || 0); } catch (e) {}
+  function pal() { var T = THEMES[theme]; if (T.ac) return T; if (T.n === "rainbow") { var h = (Date.now() / 20) % 360; return { bg: "#050505", fg: "#fff", dim: "#888", ac: "hsl(" + h + ",90%,60%)", hot: "hsl(" + ((h + 150) % 360) + ",90%,60%)" }; } return base(); }
+  function base() { return { bg: css("--mh-bg", "#040905"), fg: css("--mh-fg", "#bff5ca"), ac: css("--mh-accent", "#5dff8a"), hot: css("--mh-hot", "#ff6f91"), dim: css("--mh-dim", "#5f9e6f") }; }
   function calm() { return root.hasAttribute("data-calm") || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches); }
 
   var fbuf = null, tbuf = null, sm = [], t0 = Date.now();
@@ -64,7 +75,9 @@
     var cv = el("canvas", "mh-viz-cv"), bar = el("div", "mh-viz-bar"), name = el("span", "mh-viz-name", "no track"), note = el("span", "mh-viz-note", "");
     var mode = 0, btn = el("button", "mh-viz-mode", MODES[0]); btn.type = "button"; btn.title = "Change picture";
     btn.addEventListener("click", function () { mode = (mode + 1) % MODES.length; btn.textContent = MODES[mode]; });
-    bar.appendChild(btn); bar.appendChild(name); bar.appendChild(note);
+    var cb = el("button", "mh-viz-mode", THEMES[theme].n); cb.type = "button"; cb.title = "Change colours";
+    cb.addEventListener("click", function () { theme = (theme + 1) % THEMES.length; cb.textContent = THEMES[theme].n; try { localStorage.setItem("mh-viz-theme", theme); } catch (e) {} });
+    bar.appendChild(btn); bar.appendChild(cb); bar.appendChild(name); bar.appendChild(note);
     wrap.appendChild(cv); wrap.appendChild(bar); host.appendChild(wrap);
     var raf = 0, vis = !big, io;
     function size() { var r = wrap.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1); cv.width = Math.max(100, Math.floor(r.width * dpr)); cv.height = Math.max(80, Math.floor((r.height - 28) * dpr)); }
