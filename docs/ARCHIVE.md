@@ -7,7 +7,7 @@ The redesign is one plugin, `src/plugins/misshooch-archive/`, plus two small cha
 | File | What it does |
 |---|---|
 | `src/plugins/misshooch-archive/styles/archive.css` | Both skins, home page, callouts, status bar, photo frames |
-| `src/plugins/misshooch-archive/assets/archive-r5.js` | Skin switch, photo effects, marginalia, music player |
+| `src/plugins/misshooch-archive/assets/archive-r6.js` | Skin switch, photo effects, marginalia, music player |
 | `src/plugins/misshooch-archive/templates/` | Homepage section, status bar, nav buttons, related notes |
 | `src/site/a-z.njk` and `a-z.11tydata.js` | The alphabetical index at `/a-z/` |
 | `src/helpers/azGroups.js` | Groups note titles by letter |

@@ -1,0 +1,10 @@
+.mh-viz { position: relative; width: 100%; height: 260px; background: var(--mh-bg); border: 1px solid var(--mh-line); margin: 1.2em 0; display: flex; flex-direction: column; overflow: hidden; }
+.mh-viz-cv { flex: 1; width: 100%; min-height: 0; display: block; }
+.mh-viz-bar { height: 28px; display: flex; gap: 10px; align-items: center; padding: 0 8px; border-top: 1px solid var(--mh-line); font-family: var(--mh-ui); font-size: 1rem; color: var(--mh-dim); }
+.mh-viz-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--mh-fg); }
+.mh-viz-mode, .mh-viz-open, .mh-viz-x { font: inherit; font-family: var(--mh-ui); background: transparent; color: var(--mh-accent); border: 1px solid var(--mh-line); padding: 0 8px; cursor: pointer; }
+.mh-viz-mode:hover, .mh-viz-open:hover, .mh-viz-x:hover { background: var(--mh-accent); color: var(--mh-bg); }
+.mh-viz-ov { position: fixed; inset: 0; z-index: 10000; background: var(--mh-bg); }
+.mh-viz-big { position: absolute; inset: 0; height: auto; margin: 0; border: 0; }
+.mh-viz-x { position: absolute; top: 10px; right: 10px; z-index: 2; font-size: 1.4rem; padding: 2px 12px; }
+@media (max-width: 700px) { .mh-viz { height: 220px; } }

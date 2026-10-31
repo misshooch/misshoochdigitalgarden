@@ -324,7 +324,15 @@
     try { saved = JSON.parse(localStorage.getItem("mh-player") || "{}") || {}; } catch (e) { saved = {}; }
     if (vol && saved.v != null && !isNaN(+saved.v)) vol.value = saved.v;
     tracks.forEach(function (t, i) { if (saved.k && (t.src || "gen") === saved.k) idx = i; });
-    useWebAudio = tracks.every(function (t) { if (t.gen) return true; try { return new URL(t.src, location.href).origin === location.origin; } catch (e) { return false; } });
+    // Same-site tracks can feed the analyser at once. Tracks on another host (such as a Cloudflare R2 bucket)
+    // can only do so if that host sends CORS headers, so ask once with a small request before using them.
+    var foreign = {};
+    tracks.forEach(function (t) { if (t.gen) return; try { var u = new URL(t.src, location.href); if (u.origin !== location.origin) foreign[u.origin] = t.src; } catch (e) { foreign["?"] = t.src; } });
+    var origins = Object.keys(foreign), probed = !origins.length;
+    useWebAudio = !origins.length;
+    var probeDone = !origins.length ? Promise.resolve() : Promise.all(origins.map(function (o) {
+      return o === "?" ? false : fetch(foreign[o], { method: "HEAD", mode: "cors" }).then(function (r) { return r.ok; }).catch(function () { return false; });
+    })).then(function (res) { if (res.every(Boolean)) { useWebAudio = true; audio.crossOrigin = "anonymous"; } probed = true; }, function () { probed = true; });
 
     function key() { return tracks[idx].src || "gen"; }
     function save() { store("mh-player", JSON.stringify({ k: key(), t: audio.currentTime || 0, v: vol ? vol.value : 0.25, p: playing ? 1 : 0 })); }
@@ -333,7 +341,7 @@
     function ensureCtx() {
       if (ctx) return true;
       var AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
-      ctx = new AC(); master = ctx.createGain(); analyser = ctx.createAnalyser(); analyser.fftSize = 64;
+      ctx = new AC(); master = ctx.createGain(); analyser = ctx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = 0.78;
       master.connect(analyser); analyser.connect(ctx.destination);
       if (useWebAudio) { mediaSrc = ctx.createMediaElementSource(audio); mediaSrc.connect(master); }
       applyVolume(); return true;
@@ -354,7 +362,7 @@
       if (analyser && (tracks[idx].gen || useWebAudio)) analyser.getByteFrequencyData(data);
       c.fillStyle = getComputedStyle(doc.body).getPropertyValue("--mh-cy").trim() || "#5dff8a";
       for (var i = 0; i < 12; i++) {
-        var v = (analyser && (tracks[idx].gen || useWebAudio)) ? data[i] / 255 : (playing ? 0.25 + 0.5 * Math.abs(Math.sin(Date.now() / 220 + i)) : 0);
+        var v = (analyser && (tracks[idx].gen || useWebAudio)) ? data[1 + Math.floor(Math.pow(i / 12, 1.7) * 70)] / 255 : (playing ? 0.25 + 0.5 * Math.abs(Math.sin(Date.now() / 220 + i)) : 0);
         var h = Math.max(2, v * eq.height); c.fillRect(i * 8 + 1, eq.height - h, 6, h);
       }
       raf = playing && !reduce ? requestAnimationFrame(bars) : 0;
@@ -370,6 +378,7 @@
     }
     function play() {
       var t = tracks[idx];
+      if (!probed) { probeDone.then(play); return; }
       if (t.gen) {
         if (!ensureCtx()) { setPlaying(false); return; }
         audio.pause(); if (ctx.state === "suspended") ctx.resume(); startGen(); setPlaying(true);
@@ -382,10 +391,11 @@
     function pause() { audio.pause(); stopGen(); setPlaying(false); }
 
     title.textContent = tracks[idx].title;
-    if (!tracks[idx].gen) {
+    probeDone.then(function () {
+      if (tracks[idx].gen || audio.src) return;
       audio.src = tracks[idx].src;
       if (saved.k === key() && saved.t > 1) audio.addEventListener("loadedmetadata", function () { try { audio.currentTime = saved.t; } catch (e) {} }, { once: true });
-    }
+    });
     applyVolume();
     playBtn.addEventListener("click", function () { if (playing) pause(); else play(); });
     $("[data-mh-next]", box).addEventListener("click", function () { load(idx + 1); });
@@ -395,6 +405,13 @@
     audio.addEventListener("error", function () { setPlaying(false); title.textContent = tracks[idx].title + " (could not load)"; });
     var last = 0; audio.addEventListener("timeupdate", function () { var n = Date.now(); if (n - last > 2000) { last = n; save(); } });
     window.addEventListener("pagehide", save);
+    // A small read-only window for the visualiser (viz-r1.js).
+    window.mhAudio = {
+      analyser: function () { return analyser; },
+      live: function () { return !!analyser && (tracks[idx].gen || useWebAudio); },
+      playing: function () { return playing; },
+      title: function () { return tracks[idx].title; }
+    };
     $$(".cm-s-obsidian audio").forEach(function (a) { a.addEventListener("play", function () { if (playing) pause(); }); });
     // Carry on across pages: browsers may refuse to start sound without a click, so this is best effort.
     if (saved.p) { try { play(); } catch (e) {} }
