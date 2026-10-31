@@ -9,4 +9,4 @@ It feels hard to write to put myself online sometimes. I have a tendency to zero
 
 ![4FCFA50C-E384-4892-89D2-51E5A9AEEF30_1_105_c.jpeg\|halftone\|274](/img/user/4FCFA50C-E384-4892-89D2-51E5A9AEEF30_1_105_c.jpeg)![[8B02CEFB-D4C4-42B8-A8D7-897E905274FA_1_105_c.jpeg]
 just getting 2 grips w. my formatting :P
-![8B02CEFB-D4C4-42B8-A8D7-897E905274FA_1_105_c 1.jpeg\|154](/img/user/8B02CEFB-D4C4-42B8-A8D7-897E905274FA_1_105_c%201.jpeg)
+![[8B02CEFB-D4C4-42B8-A8D7-897E905274FA_1_105_c 1.jpeg\|154]]
