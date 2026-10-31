@@ -80,6 +80,6 @@ Maths in notes already works too: write `$e^{i\pi} + 1 = 0$` for a formula.
 
 ## Music visualiser
 
-- Press **viz** in the bottom player for a full-screen visualiser (click the first button for the picture: bars, wave, radial, spiral, rings; the second for colours: skin, sunset, ice, candy, gold, rainbow, paper; Esc closes).
+- Press **viz** in the bottom player for a full-screen visualiser (click the first button for the picture: bars, wave, radial, spiral, rings, spectrogram; the second for colours: skin, sunset, ice, candy, gold, rainbow, viridis, paper; Esc closes).
 - In a note, write `> [!visualiser]` to put a small one on the page. It follows the bottom-bar player.
 - It says **live** when it can read the sound, **simulated** when it can't. For songs on Cloudflare R2, make them live by adding a CORS rule: bucket → Settings → CORS Policy → allow `GET` and `HEAD` from `*`.

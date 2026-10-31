@@ -8,7 +8,7 @@
 (function () {
   "use strict";
   var doc = document, root = doc.documentElement;
-  var MODES = ["bars", "wave", "radial", "spiral", "rings"];
+  var MODES = ["bars", "wave", "radial", "spiral", "rings", "spectrogram"];
   function el(t, c, h) { var e = doc.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; }
   function css(n, f) { var v = getComputedStyle(root).getPropertyValue(n).trim(); return v || f; }
   var THEMES = [
@@ -18,6 +18,7 @@
     { n: "candy", ac: "#ff5fd2", hot: "#ffe14d", fg: "#ffe6f7", dim: "#a1428a", bg: "#10041a" },
     { n: "gold", ac: "#ffd700", hot: "#ffffff", fg: "#fff4c2", dim: "#8a7420", bg: "#0a0800" },
     { n: "rainbow" },
+    { n: "viridis", ac: "#5ee67a", hot: "#c8e84a", fg: "#d8f5e0", dim: "#1f8a7a", bg: "#03050f", map: true },
     { n: "paper", ac: "#111111", hot: "#d6001c", fg: "#111111", dim: "#777777", bg: "#f4efe4" }
   ];
   var theme = 0; try { theme = Math.min(THEMES.length - 1, parseInt(localStorage.getItem("mh-viz-theme"), 10) || 0); } catch (e) {}
@@ -43,7 +44,20 @@
     return { f: sm.slice(), w: w, live: live, playing: playing };
   }
 
+  var VIR = [[3, 5, 15], [68, 1, 84], [49, 104, 142], [33, 145, 140], [53, 183, 121], [144, 215, 67], [253, 231, 37]];
+  function viridis(v) { v = Math.max(0, Math.min(1, v)) * (VIR.length - 1); var i = Math.min(VIR.length - 2, Math.floor(v)), k = v - i, a = VIR[i], b = VIR[i + 1]; return "rgb(" + Math.round(a[0] + (b[0] - a[0]) * k) + "," + Math.round(a[1] + (b[1] - a[1]) * k) + "," + Math.round(a[2] + (b[2] - a[2]) * k) + ")"; }
+  var lastMode = "";
   function draw(ctx, W, H, mode, d, p, t) {
+    if (mode === "spectrogram") {
+      // A scrolling picture of sound over time: time runs left to right, low notes at the bottom.
+      var step = Math.max(2, Math.round(W / 420)), N2 = d.f.length;
+      if (lastMode !== mode) { ctx.fillStyle = viridis(0); ctx.fillRect(0, 0, W, H); }
+      lastMode = mode;
+      ctx.globalAlpha = 1; ctx.drawImage(ctx.canvas, -step, 0);
+      for (var k = 0; k < N2; k++) { ctx.fillStyle = viridis(Math.pow(d.f[k], 1.25) * 0.95); ctx.fillRect(W - step, H - (k + 1) * H / N2, step, Math.ceil(H / N2) + 1); }
+      return;
+    }
+    lastMode = mode;
     ctx.globalAlpha = 1; ctx.fillStyle = p.bg; ctx.fillRect(0, 0, W, H);
     var f = d.f, N = f.length, cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2, i;
     var bass = (f[1] + f[2] + f[3] + f[4]) / 4;
