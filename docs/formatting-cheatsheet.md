@@ -56,3 +56,24 @@ Write a callout with one of these names. Each line inside is plain text. A photo
 | `> [!terminal] boot` then lines | green text typed out as the reader scrolls to it |
 
 If a name is misspelled, the callout simply shows as a normal box.
+
+## Sacred geometry, topology and polymath tools
+
+Same idea: a callout with one of these names. Numbers go in the title or the first line.
+
+| You type | You get |
+|---|---|
+| `> [!flower] 3` | the Flower of Life, 1 to 6 rings |
+| `> [!phyllotaxis] 900` | a sunflower spiral of seeds placed by the golden angle |
+| `> [!mandala] any words` | a mandala grown from the words; the same words always grow the same mandala |
+| `> [!ulam] 45` | the Ulam spiral: numbers wound into a square, primes lit |
+| `> [!pascal] 16` | Pascal's triangle. Add a line `mod 2` for the Sierpinski triangle |
+| `> [!collatz] 27` | the hailstone path of a number, with its steps and peak |
+| `> [!mobius]` | a slowly turning Mobius band |
+| `> [!knot] 3,2` | a turning torus knot. 3,2 is the trefoil |
+| `> [!graph] Title` then lines like `A - B` | a drawn network, and whether you can walk every edge exactly once |
+| `> [!number] 144` | facts: factors, perfect or abundant, Fibonacci, binary, hex, roman numeral |
+| `> [!gematria] Title` then lines of words | letter values added up and reduced to one digit |
+| `> [!timeline] Title` then lines like `1666: the plague year` | a sorted vertical timeline, negative years for BC |
+
+Maths in notes already works too: write `$e^{i\pi} + 1 = 0$` for a formula.

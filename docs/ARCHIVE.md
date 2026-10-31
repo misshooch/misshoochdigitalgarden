@@ -69,3 +69,6 @@ Edit `src/site/playlist.txt`, one song per line as `Title|https://link.mp3`. Lin
 
 ## Play components (v1.6)
 `assets/play-r2.js` and `styles/play.css` turn callouts named idcard, fibonacci, fibpoem, polaroid, redacted, oracle, progress, countdown and terminal into interactive blocks. See `docs/formatting-cheatsheet.md`.
+
+## Geometry, topology and polymath tools (v1.7)
+`assets/math-r1.js` and `styles/math.css`: flower, phyllotaxis, mandala, ulam, pascal, collatz, mobius, knot, graph, number, gematria and timeline callouts. See `docs/formatting-cheatsheet.md`.

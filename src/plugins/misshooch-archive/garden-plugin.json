@@ -1,7 +1,7 @@
 {
   "id": "misshooch-archive",
   "name": "Miss Hooch Archive",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Phosphor Archive design: Terminal and cyber-blue skins, an alphabetical index, a status bar with a music player, photo effects driven by Obsidian image embeds, marginalia and a restyled graph.",
   "author": "Miss Hooch",
   "slots": {
@@ -14,11 +14,13 @@
   },
   "styles": [
     "styles/archive.css",
-    "styles/play.css"
+    "styles/play.css",
+    "styles/math.css"
   ],
   "scripts": [
     "assets/archive-r5.js",
-    "assets/play-r2.js"
+    "assets/play-r2.js",
+    "assets/math-r1.js"
   ],
   "settings": [
     {
