@@ -172,7 +172,9 @@ function getAnchorAttributes(filePath, linkTitle) {
 }
 
 function computeAnchorAttributes(filePath, linkTitle) {
-  let fileName = filePath.replaceAll("&amp;", "&");
+  // Obsidian ignores stray spaces inside [[ ]] links ("[[Sleep ]]"); so do we.
+  let fileName = filePath.replaceAll("&amp;", "&").trim();
+  linkTitle = linkTitle ? linkTitle.trim() : linkTitle;
   let header = "";
   let headerLinkPath = "";
   if (fileName.includes("#")) {
