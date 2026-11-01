@@ -21,7 +21,7 @@
   "scripts": [
     "assets/archive-r6.js",
     "assets/play-r2.js",
-    "assets/math-r1.js",
+    "assets/math-r2.js",
     "assets/viz-r6.js"
   ],
   "settings": [

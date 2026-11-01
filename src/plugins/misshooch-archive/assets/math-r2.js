@@ -154,7 +154,7 @@
   /* ---- topology ---- */
   function proj(x, y, z, a, W, H, s) { var y2 = y * Math.cos(a) - z * Math.sin(a), z2 = y * Math.sin(a) + z * Math.cos(a), x2 = x * Math.cos(a * 0.6) + z2 * Math.sin(a * 0.6), z3 = -x * Math.sin(a * 0.6) + z2 * Math.cos(a * 0.6); return [W / 2 + x2 * s, H / 2 + y2 * s, z3]; }
   function mobius(c) {
-    var d = parse(c, "mobius"), o = canvasBox("mobius", 560, 380, "A Mobius band: one side, one edge. Follow a line along it and you return upside down.");
+    var d = parse(c, "mobius"), o = canvasBox("mobius", 560, 380, "");
     var U = 120, V = 5, grid = [];
     for (var i = 0; i <= U; i++) { grid[i] = []; var u = TAU * i / U; for (var j = 0; j <= V; j++) { var v = -1 + 2 * j / V, r = 1 + v / 2 * Math.cos(u / 2); grid[i][j] = [r * Math.cos(u), r * Math.sin(u), v / 2 * Math.sin(u / 2)]; } }
     spin(o.cv, function (ctx, W, H, p, a) {
