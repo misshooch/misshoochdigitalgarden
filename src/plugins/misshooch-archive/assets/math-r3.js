@@ -50,7 +50,9 @@
   }
   function canvasBox(cls, w, h, caption) {
     var box = el("div", "mh-play mh-cv mh-" + cls), cv = el("canvas"); cv.width = w; cv.height = h; cv.setAttribute("role", "img");
-    box.appendChild(cv); if (caption) box.appendChild(el("p", "mh-cv-cap", caption));
+    // Just the name of the thing, no explanation.
+    var NAMES = { flower: "Flower of Life", phyllo: "Phyllotaxis", mandala: "Mandala", ulam: "Ulam spiral", pascal: "Pascal's triangle", collatz: "Collatz", mobius: "Möbius band", knot: "Knot", graph: "Graph" };
+    box.appendChild(cv); box.appendChild(el("p", "mh-cv-cap", esc(cls === "graph" && caption ? caption : NAMES[cls] || "")));
     return { box: box, cv: cv };
   }
   function paint(cv, fn) {
@@ -122,7 +124,6 @@
         x += dx; y += dy; if (--left === 0) { var t = dx; dx = -dy; dy = t; turns++; if (turns % 2 === 0) step++; left = step; }
       }
     });
-    cap.textContent = "Numbers 1 to " + (n * n) + " wound into a square spiral. The bright cells are the " + count + " primes, and they gather along diagonal lines.";
     swap(c, o.box);
   }
   function pascal(c) {
@@ -189,7 +190,7 @@
     edges.forEach(function (e) { par[find(names[e[0]])] = find(names[e[1]]); });
     var connected = list.every(function (_, i) { return find(i) === find(0); }), odd = deg.filter(function (x) { return x % 2; }).length;
     var verdict = !connected ? "The graph is in separate pieces, so no walk reaches every edge." : odd === 0 ? "Every point has an even number of edges: you can walk every edge exactly once and finish where you started (an Euler circuit)." : odd === 2 ? "Exactly two points have an odd number of edges: you can walk every edge exactly once, starting at one of them and ending at the other (an Euler path)." : odd + " points have an odd number of edges, so no walk can use every edge exactly once. This is how Euler settled the bridges of Konigsberg.";
-    var o = canvasBox("graph", 560, 380, esc(d.title ? d.title + ": " : "") + verdict);
+    var o = canvasBox("graph", 560, 380, d.title || "");
     paint(o.cv, function (ctx, W, H, p) {
       var n = list.length, pos = list.map(function (_, i) { var t = TAU * i / n - Math.PI / 2, R = Math.min(W, H) * 0.34; return [W / 2 + R * Math.cos(t) * (W / H > 1.3 ? 1.3 : 1), H / 2 + R * Math.sin(t)]; }), seen = {};
       ctx.lineWidth = 1.6; ctx.strokeStyle = p.acc;
