@@ -480,6 +480,23 @@
         img.src = photos[i];
       });
     }
+    // click the ID card photo to cycle through the ID photos
+    var idw = $(".mh-idwrap");
+    var ids = idw ? (idw.getAttribute("data-ids") || "").split("|").filter(Boolean) : [];
+    if (idw && ids.length > 1) {
+      idw.style.cursor = "pointer"; idw.title = "click to change ID photo";
+      var j = 0;
+      idw.addEventListener("click", function () {
+        j = (j + 1) % ids.length;
+        var img = new Image(); img.className = "mh-skinfx mh-idph"; img.alt = ""; img.width = 84;
+        img.onload = function () {
+          $$("canvas, img, picture", idw).forEach(function (n) { n.remove(); });
+          skinFxList = skinFxList.filter(function (it) { return it.cv.isConnected; });
+          idw.appendChild(img); safe("skin images", setupSkinFx);
+        };
+        img.src = ids[j];
+      });
+    }
   }
 
   function win_load(fn) { if (doc.readyState === "complete") fn(); else window.addEventListener("load", fn, { once: true }); }

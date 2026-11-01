@@ -350,6 +350,8 @@ html[data-skin="cyber"] .mh-vt { font-family: var(--mh-ui); font-size: 9px; }
 .mh-idb { display: flex; gap: 12px; padding: 8px 0; }
 .mh-idb canvas, .mh-idb img { width: 84px; height: auto; flex: none; border: 1px solid var(--mh-accent); background: #000; align-self: flex-start; }
 .mh-idb picture { flex: none; }
+.mh-idwrap { flex: none; display: block; align-self: flex-start; }
+.mh-idwrap canvas, .mh-idwrap img { display: block; }
 .mh-idb dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 10px; font: 12px/1.6 var(--mh-mono); align-content: start; }
 .mh-idb dt { color: var(--mh-dim); }
 .mh-idb dd { margin: 0; color: var(--mh-fg); }

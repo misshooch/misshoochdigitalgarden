@@ -1,10 +1,12 @@
 {% if not isFallbackIndex and not isAzPage and not isPhotosPage %}
 {% set featuredTag = pluginSettings.featuredTag or "featured" %}
 {% set portraitSrc = pluginSettings.portrait or (archiveGallery.local[0].src if archiveGallery.local.length else "") %}
+{% set idList = pluginSettings.idPhotos or portraitSrc %}
+{% set idFirst = idList.split("|")[0] %}
 <div class="mh-home">
   <section class="mh-hero">
     {% if portraitSrc %}
-    <figure class="mh-portrait" data-photos="{{ archiveGallery.joined }}">
+    <figure class="mh-portrait" data-photos="{{ portraitSrc }}|{{ archiveGallery.joined | replace(portraitSrc, '') }}">
       <img class="mh-skinfx" src="{{ portraitSrc }}" alt="Portrait of {{ meta.siteName }}" width="480">
       <span class="mh-vt" aria-hidden="true">SYSTEM ANGEL // ONLINE</span>
     </figure>
@@ -12,7 +14,7 @@
     <div class="mh-idcard" aria-label="Archive ID card">
       <div class="mh-idh"><span>{{ meta.siteName }}</span><span>SIGNAL: ONLINE</span></div>
       <div class="mh-idb">
-        {% if portraitSrc %}<img class="mh-skinfx mh-idph" src="{{ portraitSrc }}" alt="" width="84">{% endif %}
+        {% if idFirst %}<span class="mh-idwrap" data-ids="{{ idList }}"><img class="mh-skinfx mh-idph" src="{{ idFirst }}" alt="" width="84"></span>{% endif %}
         <dl>
           <dt>SUBJECT</dt><dd>{{ meta.siteName }}</dd>
           <dt>NOTES</dt><dd data-mh-count>&ndash;</dd>

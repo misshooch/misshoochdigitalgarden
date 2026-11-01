@@ -1,7 +1,7 @@
 {
   "id": "misshooch-archive",
   "name": "Miss Hooch Archive",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Phosphor Archive design: Terminal and cyber-blue skins, an alphabetical index, a status bar with a music player, photo effects driven by Obsidian image embeds, marginalia and a restyled graph.",
   "author": "Miss Hooch",
   "slots": {
@@ -19,7 +19,7 @@
     "styles/viz.css"
   ],
   "scripts": [
-    "assets/archive-r6.js",
+    "assets/archive-r7.js",
     "assets/play-r2.js",
     "assets/math-r3.js",
     "assets/viz-r6.js",
@@ -43,9 +43,16 @@
     {
       "key": "portrait",
       "name": "Homepage portrait",
-      "description": "Path of the photo shown on the homepage and on the ID card. Leave empty for none.",
+      "description": "Path of the first photo shown on the homepage (click it to cycle through the rest). Leave empty to use the first photo in the gallery.",
       "type": "text",
-      "default": ""
+      "default": "/img/photos/Pool%20table.jpg"
+    },
+    {
+      "key": "idPhotos",
+      "name": "ID card photos",
+      "description": "Photos for the homepage ID card, separated by |. The first one shows first; click the ID photo to cycle. Leave empty to reuse the homepage photo.",
+      "type": "text",
+      "default": "/img/id/id-pool.jpg|/img/id/id-smile.jpg|/img/id/id-dress.jpg"
     },
     {
       "key": "idStatus",
