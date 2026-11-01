@@ -402,6 +402,19 @@ html body.markdown-preview-view .content .mh-gal-set h2 { font-size: 1.6rem; mar
 .mh-gal-cap { font: 11px var(--mh-mono); letter-spacing: 0.08em; color: var(--mh-dim); }
 html[data-skin="cyber"] .mh-gal-cell img { border-radius: 10px; border: 2px solid #fff; outline: 1px solid #8fb0e6; }
 
+/* ---------- hit counter (odometer in the status bar) ---------- */
+.mh-hits { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: default; }
+.mh-hits[hidden] { display: none; }
+.mh-hits-n { display: inline-flex; gap: 1px; }
+.mh-hits-n span {
+  display: inline-block; min-width: 0.62em; padding: 0 2px; text-align: center; font-family: var(--mh-ui); font-size: 1.15rem; line-height: 1.1;
+  color: var(--mh-accent); background: #000; border: 1px solid var(--mh-line); text-shadow: var(--mh-glow);
+}
+html[data-skin="cyber"] .mh-hits-n span {
+  color: #fff; text-shadow: none; border-color: #1f5bff;
+  background: linear-gradient(#3d8bff 0%, #1f5bff 50%, #0b2f9e 52%, #1f5bff 100%);
+}
+@media (max-width: 600px) { .mh-hits-l { display: none; } }
 /* ---------- player additions ---------- */
 .mh-vol { display: inline-flex; align-items: center; gap: 4px; }
 .mh-vol input { width: 72px; accent-color: var(--mh-accent); }
