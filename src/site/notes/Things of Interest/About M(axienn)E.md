@@ -14,7 +14,7 @@
 > aged between 26 and 27 depending on how you count time. 
  
 
->[!countdown] Time Since Birth  
+>[!countdown] Time Since Birth  11/06/2000 1:26pm
 >2000-06-11 1:26pm
 
 >[!oracle]ask me 
