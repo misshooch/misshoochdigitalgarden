@@ -177,14 +177,28 @@
   }
 
   /* ---- countdown ---- */
+  /* "2000-06-11 1:26pm GMT", "2026-12-25", "2027-01-01 00:00 +11:00". With no zone, the visitor's own clock. */
+  var ZONES = { gmt: 0, utc: 0, z: 0, bst: 60, cet: 60, cest: 120, aest: 600, aedt: 660 };
+  function when_(text) {
+    var m = String(text).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T]+(\d{1,2})(?:[:.](\d{2}))?(?::(\d{2}))?\s*(am|pm)?)?\s*([a-z]+|[+-]\d{1,2}:?\d{2})?$/i);
+    if (!m) return new Date(NaN);
+    var h = +(m[4] || 0), mi = +(m[5] || 0), se = +(m[6] || 0), ap = (m[7] || "").toLowerCase(), z = (m[8] || "").toLowerCase();
+    if (ap === "pm" && h < 12) h += 12; if (ap === "am" && h === 12) h = 0;
+    if (!z) return new Date(+m[1], +m[2] - 1, +m[3], h, mi, se);
+    var off;
+    if (z in ZONES) off = ZONES[z];
+    else { var o = z.match(/^([+-])(\d{1,2}):?(\d{2})$/); if (!o) return new Date(NaN); off = (o[1] === "-" ? -1 : 1) * (+o[2] * 60 + +o[3]); }
+    return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], h, mi, se) - off * 6e4);
+  }
   function countdown(c) {
-    var d = parse(c, "countdown"), when = new Date((d.lines[0] || "").replace(/\s+/g, "T")), box = el("div", "mh-play mh-cd"), out = el("code", "mh-cd-n");
+    var d = parse(c, "countdown"), when = when_(d.lines[0] || ""), box = el("div", "mh-play mh-cd"), out = el("code", "mh-cd-n");
     box.appendChild(el("span", "", esc(d.title || "countdown"))); box.appendChild(out);
     function tick() {
-      if (isNaN(when.getTime())) { out.textContent = "use a date like 2026-12-25"; return; }
+      if (isNaN(when.getTime())) { out.textContent = "use a date like 2026-12-25 or 2000-06-11 1:26pm GMT"; return; }
       var ms = when - new Date(), sign = ms < 0 ? "T+ " : "T- "; ms = Math.abs(ms);
       var dd = Math.floor(ms / 864e5), hh = Math.floor(ms % 864e5 / 36e5), mm = Math.floor(ms % 36e5 / 6e4), ss = Math.floor(ms % 6e4 / 1e3);
-      out.textContent = sign + dd + "d " + ("0" + hh).slice(-2) + "h " + ("0" + mm).slice(-2) + "m " + ("0" + ss).slice(-2) + "s";
+      var yy = Math.floor(dd / 365.2425), rd = Math.floor(dd - yy * 365.2425);
+      out.textContent = sign + (yy ? yy + "y " + rd + "d " : dd + "d ") + ("0" + hh).slice(-2) + "h " + ("0" + mm).slice(-2) + "m " + ("0" + ss).slice(-2) + "s";
     }
     tick(); setInterval(tick, 1000); swap(c, box);
   }
