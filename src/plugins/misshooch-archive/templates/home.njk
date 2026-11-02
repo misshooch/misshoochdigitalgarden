@@ -1,4 +1,4 @@
-{% if not isFallbackIndex and not isAzPage and not isPhotosPage %}
+{% if not isFallbackIndex and not isAzPage and not isPhotosPage and not isSectionPage %}
 {% set featuredTag = pluginSettings.featuredTag or "featured" %}
 {% set portraitSrc = pluginSettings.portrait or (archiveGallery.local[0].src if archiveGallery.local.length else "") %}
 {% set idList = pluginSettings.idPhotos or portraitSrc %}

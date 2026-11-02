@@ -1,0 +1,21 @@
+---
+pagination:
+  data: archiveSections
+  size: 1
+  alias: section
+permalink: "/sections/{{ section.slug }}/"
+---
+<div class="mh-sec">
+  {% if sectionNotes.length %}
+    <ul class="mh-feat">
+      {% for n in sectionNotes %}
+        <li>
+          <a class="mh-t internal-link" href="{{ n.url }}">{{ n.title }}</a>
+          {% if n.description %}<p>{{ n.description }}</p>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nothing here yet. Notes published into the "{{ section.folder }}" folder in Obsidian will appear on this page.</p>
+  {% endif %}
+</div>

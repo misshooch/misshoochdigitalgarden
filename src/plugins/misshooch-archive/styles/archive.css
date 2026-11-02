@@ -488,3 +488,16 @@ html[data-skin="cyber"] .mh-trk i{background:#19d3ff;color:#06163a}
 .mh-gal-tile img, .mh-gal-tile canvas { display: block; width: 100%; height: auto; border: 1px solid var(--mh-line); }
 .mh-gal-tile:hover img, .mh-gal-tile:hover canvas, .mh-gal-tile:focus-visible img, .mh-gal-tile:focus-visible canvas { border-color: var(--mh-accent); }
 html[data-skin="cyber"] .mh-gal-tile img, html[data-skin="cyber"] .mh-gal-tile canvas { border-radius: 10px; border: 2px solid #fff; outline: 1px solid #8fb0e6; }
+
+/* ---------- sections (sidebar list + section pages) ---------- */
+.mh-secnav { margin: 10px 0 14px; padding: 8px 10px; border: 1px solid var(--mh-line); }
+.mh-secnav .mh-lab { display: block; margin-bottom: 4px; }
+.mh-secnav ul { list-style: none; margin: 0; padding: 0; }
+.mh-secnav li { margin: 0; padding: 0; }
+.mh-secnav a { display: block; padding: 2px 0; font-family: var(--mh-ui); font-size: 1.15rem; letter-spacing: 0.04em; color: var(--mh-fg); text-decoration: none; }
+.mh-secnav a::before { content: "> "; color: var(--mh-dim); }
+.mh-secnav a:hover, .mh-secnav a.is-here { color: var(--mh-accent); }
+html[data-skin="cyber"] .mh-secnav { border: 1px solid #8fb0e6; border-radius: 10px; background: rgba(255, 255, 255, 0.5); }
+html[data-skin="cyber"] .mh-secnav a { color: #0b2f9e; }
+html[data-skin="cyber"] .mh-secnav a:hover, html[data-skin="cyber"] .mh-secnav a.is-here { color: #1f5bff; }
+.mh-sec .mh-feat li:nth-child(n + 9) { display: block; }
