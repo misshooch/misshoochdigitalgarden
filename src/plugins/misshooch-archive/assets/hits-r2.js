@@ -1,9 +1,10 @@
 /*
   Miss Hooch Archive: hit counter.
 
-  Fills the odometer in the status bar with the total hits for the whole site.
-  Hover it to see the hits for the page you are on.
-  Each page counts once per visit (reloading doesn't add more).
+  Fills the odometer in the status bar with the number of visits to the site.
+  A visit counts once, on the first page; moving around the site or reloading
+  doesn't add to it. A visit ends when the visitor closes the tab.
+  Hover it to see how many times the page you are on has been viewed.
   If the counter backend isn't connected yet, the counter stays hidden.
 */
 (function () {
@@ -28,16 +29,18 @@
   var seenKey = "mh-hit:" + path, seen = false;
   try { seen = sessionStorage.getItem(seenKey) === "1"; } catch (e) {}
 
+  var newVisit = false;
+  try { newVisit = sessionStorage.getItem("mh-visit") !== "1"; } catch (e) {}
   draw(null);
-  fetch("/api/hits?path=" + encodeURIComponent(path), { method: seen ? "GET" : "POST", keepalive: true })
+  fetch("/api/hits?path=" + encodeURIComponent(path) + (newVisit ? "&visit=1" : ""), { method: seen && !newVisit ? "GET" : "POST", keepalive: true })
     .then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (d) {
       if (d.total == null) return;
       draw(d.total);
       box.hidden = false;
-      box.title = "this page: " + (d.page || 0) + (d.page === 1 ? " hit" : " hits");
-      box.setAttribute("aria-label", d.total + " hits on the archive, " + (d.page || 0) + " on this page");
-      try { sessionStorage.setItem(seenKey, "1"); } catch (e) {}
+      box.title = "this page: " + (d.page || 0) + (d.page === 1 ? " view" : " views");
+      box.setAttribute("aria-label", d.total + " visits to the archive, " + (d.page || 0) + " views of this page");
+      try { sessionStorage.setItem(seenKey, "1"); sessionStorage.setItem("mh-visit", "1"); } catch (e) {}
     })
     .catch(function () {});
 })();

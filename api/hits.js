@@ -1,7 +1,9 @@
 /*
   Hit counter for the archive status bar.
 
-  POST /api/hits?path=/notes/some-note  -> counts one hit, returns the totals
+  POST /api/hits?path=/notes/some-note          -> counts one view of that page
+  POST /api/hits?path=/notes/some-note&visit=1  -> also counts one visit to the site
+                                                   (sent once per visit, on the first page)
   GET  /api/hits?path=/notes/some-note  -> returns the totals without counting
 
   Response: { "total": 1234, "page": 56 }
@@ -56,11 +58,11 @@ module.exports = async function handler(req, res) {
   const pageKey = "mh:page:" + path;
   const ua = req.headers["user-agent"] || "";
   const count = req.method === "POST" && ua && !BOTS.test(ua);
+  const visit = count && query.get("visit") === "1";
 
   try {
-    const [total, page] = count
-      ? await redis(url, token, [["INCR", "mh:hits"], ["INCR", pageKey], ["ZINCRBY", "mh:pages", "1", path]])
-      : await redis(url, token, [["GET", "mh:hits"], ["GET", pageKey]]);
+    const pageOps = count ? [["INCR", pageKey], ["ZINCRBY", "mh:pages", "1", path]] : [["GET", pageKey]];
+    const [total, page] = await redis(url, token, [[visit ? "INCR" : "GET", "mh:hits"], ...pageOps]);
     res.statusCode = 200;
     res.end(JSON.stringify({ total, page }));
   } catch (e) {
