@@ -4,6 +4,7 @@
 {% set idList = pluginSettings.idPhotos or portraitSrc %}
 {% set idFirst = idList.split("|")[0] %}
 <div class="mh-home">
+  <p class="mh-currently">Currently, I am writing <a class="internal-link" href="/sections/daily-entry/">Daily Entry</a> with <a class="internal-link" href="/sections/other-essays/">other essays</a>, and <a class="internal-link" href="/sections/things-of-interest/">things of interest</a>!</p>
   <section class="mh-hero">
     {% if portraitSrc %}
     <figure class="mh-portrait" data-photos="{{ portraitSrc }}|{{ archiveGallery.joined | replace(portraitSrc, '') }}">

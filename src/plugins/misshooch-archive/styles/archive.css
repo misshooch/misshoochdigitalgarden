@@ -501,3 +501,4 @@ html[data-skin="cyber"] .mh-secnav { border: 1px solid #8fb0e6; border-radius: 1
 html[data-skin="cyber"] .mh-secnav a { color: #0b2f9e; }
 html[data-skin="cyber"] .mh-secnav a:hover, html[data-skin="cyber"] .mh-secnav a.is-here { color: #1f5bff; }
 .mh-sec .mh-feat li:nth-child(n + 9) { display: block; }
+.mh-home .mh-currently { margin: 0 0 1em; }
