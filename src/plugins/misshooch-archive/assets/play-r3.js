@@ -26,6 +26,7 @@
 
   function parse(c, type) {
     var t = $(".callout-title-inner", c); var title = t ? t.textContent.trim() : "";
+    title = title.replace(/`/g, "").trim();
     if (title.toLowerCase() === type) title = "";
     var content = $(".callout-content", c), media = null, lines = [];
     if (content) {
@@ -33,16 +34,18 @@
       var copy = content.cloneNode(true);
       $$("picture, img", copy).forEach(function (n) { n.remove(); });
       $$("br", copy).forEach(function (b) { b.replaceWith("\n"); });
+      $$("del, s", copy).forEach(function (n) { n.replaceWith("~~" + n.textContent + "~~"); });
       $$("p, li, div", copy).forEach(function (n) { n.appendChild(doc.createTextNode("\n")); });
-      lines = copy.textContent.split("\n").map(function (s) { return s.trim(); }).filter(Boolean);
+      lines = copy.textContent.split("\n").map(function (s) { return s.replace(/`/g, "").trim(); }).filter(Boolean);
     }
     return { title: title, lines: lines, media: media };
   }
   function kv(lines) {
     var pairs = [], rest = [];
-    lines.forEach(function (l) { var i = l.indexOf(":"); if (i > 0 && i < 24) pairs.push([l.slice(0, i).trim(), l.slice(i + 1).trim()]); else rest.push(l); });
+    lines.forEach(function (l) { var i = l.indexOf(":"); if (i > 0 && i < 60) pairs.push([l.slice(0, i).trim(), l.slice(i + 1).trim()]); else rest.push(l); });
     return { pairs: pairs, rest: rest };
   }
+  function rich(s) { return esc(s).replace(/~~([^~]*)~~/g, "<s>$1</s>"); }
   function swap(c, node) { c.parentNode.replaceChild(node, c); }
   function cssColor(v) { try { return window.CSS && CSS.supports("color", v) ? v : ""; } catch (e) { return ""; } }
 
@@ -60,7 +63,7 @@
       if (k === "signal") signal = kvp[1];
       else if (k === "note" || k === "auth" || k === "text") note = kvp[1];
       else if (k === "color" || k === "colour") color = cssColor(kvp[1]);
-      else rows += "<dt>" + esc(kvp[0].toUpperCase()) + "</dt><dd>" + esc(kvp[1]) + "</dd>";
+      else rows += "<dt>" + rich(kvp[0].toUpperCase()) + "</dt><dd>" + rich(kvp[1]) + "</dd>";
     });
     if (p.rest.length) note = p.rest.join(" ");
     var seed = hash(name), no = ("000000" + (seed % 1000000)).slice(-6);

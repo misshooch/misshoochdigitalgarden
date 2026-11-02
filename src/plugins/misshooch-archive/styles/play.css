@@ -10,8 +10,8 @@
 .mh-id-ph { flex: 0 0 96px; width: 96px; height: 120px; border: 1px solid var(--c); background: #000; display: flex; align-items: center; justify-content: center; font: 44px var(--mh-ui); color: var(--c); overflow: hidden; }
 .mh-id-ph img, .mh-id-ph picture { display: block; width: 100%; height: 100%; object-fit: cover; }
 .mh-id-ph img { filter: grayscale(1) contrast(1.15); mix-blend-mode: normal; }
-.mh-id dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 12.5px; align-content: start; min-width: 0; }
-.mh-id dt { color: var(--mh-dim); letter-spacing: .08em; }
+.mh-id dl { margin: 0; display: grid; grid-template-columns: minmax(0, max-content) minmax(0, 1fr); gap: 3px 10px; font-size: 12.5px; align-content: start; min-width: 0; }
+.mh-id dt { color: var(--mh-dim); letter-spacing: .08em; max-width: 14em; overflow-wrap: anywhere; }
 .mh-id dd { margin: 0; color: var(--mh-fg); overflow-wrap: anywhere; }
 .mh-id-t { margin: 4px 2px 8px; font-size: 10.5px; letter-spacing: .06em; color: var(--mh-dim); text-transform: uppercase; }
 .mh-id-bars { display: block; width: 100%; height: 26px; color: var(--c); opacity: .9; }
