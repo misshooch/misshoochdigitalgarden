@@ -18,7 +18,7 @@
 >2000-06-11 1:26pm
 
 >[!oracle]ask me 
-> Red or Green 
-> windows 
-> in the kingdom of the blind, the one eyed man is king 
+> 4 help 
+> anything 
+> another time
 
