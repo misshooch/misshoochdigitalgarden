@@ -1,14 +1,17 @@
 {
   "id": "misshooch-archive",
   "name": "Miss Hooch Archive",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Phosphor Archive design: Terminal and cyber-blue skins, an alphabetical index, a status bar with a music player, photo effects driven by Obsidian image embeds, marginalia and a restyled graph.",
   "author": "Miss Hooch",
   "slots": {
     "common.head": "templates/head.njk",
     "common.footer": "templates/statusbar.njk",
     "navbar.actions": "templates/actions.njk",
-    "filetree.actions": "templates/actions.njk",
+    "filetree.actions": [
+      "templates/actions.njk",
+      "templates/sections.njk"
+    ],
     "index.afterContent": "templates/home.njk",
     "sidebar.bottom": "templates/related.njk"
   },

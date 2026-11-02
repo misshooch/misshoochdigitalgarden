@@ -1,0 +1,11 @@
+{% if archiveSections and archiveSections.length %}
+<nav class="mh-secnav" aria-label="Sections">
+  <span class="mh-lab">sections</span>
+  <ul>
+    {% for s in archiveSections %}
+      {% set href = "/sections/" + s.slug + "/" %}
+      <li><a class="{{ 'is-here' if page.url == href }}" href="{{ href }}">{{ s.name }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+{% endif %}
