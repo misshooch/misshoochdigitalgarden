@@ -12,10 +12,10 @@
 > 11 June 2543BE - Thai Buddhist (26)
 > 11/06/2000 12th moon of cooperation - 13 moon calendar (26)
 > aged between 26 and 27 depending on how you count time. 
- [!countdown] 
+ 
 
 >[!countdown] Time Since Birth  
->2000-06-11
+>2000-06-11 1:26pm
 
 >[!oracle]ask me 
 > Red or Green 
