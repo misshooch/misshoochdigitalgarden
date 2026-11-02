@@ -77,9 +77,22 @@
         {% endfor %}
         {% set slotName = "filetree.actions" %}{% include "components/pluginSlot.njk" %}
          <div class="folder" x-data="{isOpen: true}">
+               {#- folders first; loose notes tucked into one folder that starts closed -#}
                {%- for fileOrFolderName, fileOrFolder in filetree -%}
-                  {{menuItem(fileOrFolderName, fileOrFolder, 0, fileOrFolderName)}}
+                  {%- if fileOrFolder.isFolder -%}{{menuItem(fileOrFolderName, fileOrFolder, 0, fileOrFolderName)}}{%- endif -%}
                {%- endfor -%}
+               <div x-show="isOpen" style="display:none">
+                 <div class="folder inner-folder" x-data="{isOpen: $persist(false).as('__loose-notes')}" @click.stop="isOpen=!isOpen">
+                   <div class="foldername-wrapper align-icon">
+                     <i x-show="isOpen" style="display: none;" data-lucide="chevron-down"></i>
+                     <i x-show="!isOpen" data-lucide="chevron-right"></i>
+                     <span class="foldername">Everything else</span>
+                   </div>
+                   {%- for fileOrFolderName, fileOrFolder in filetree -%}
+                      {%- if fileOrFolder.isNote -%}{{menuItem(fileOrFolderName, fileOrFolder, 1, fileOrFolderName)}}{%- endif -%}
+                   {%- endfor -%}
+                 </div>
+               </div>
          </div>
       </nav>
       </div>
