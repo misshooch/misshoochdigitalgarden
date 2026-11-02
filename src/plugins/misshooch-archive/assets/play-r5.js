@@ -180,7 +180,8 @@
   /* "2000-06-11 1:26pm GMT", "2026-12-25", "2027-01-01 00:00 +11:00". With no zone, the visitor's own clock. */
   var ZONES = { gmt: 0, utc: 0, z: 0, bst: 60, cet: 60, cest: 120, aest: 600, aedt: 660 };
   function when_(text) {
-    var m = String(text).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T]+(\d{1,2})(?:[:.](\d{2}))?(?::(\d{2}))?\s*(am|pm)?)?\s*([a-z]+|[+-]\d{1,2}:?\d{2})?$/i);
+    text = String(text).trim().replace(/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})/, "$3-$2-$1");
+    var m = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T]+(\d{1,2})(?:[:.](\d{2}))?(?::(\d{2}))?\s*(am|pm)?)?\s*([a-z]+|[+-]\d{1,2}:?\d{2})?$/i);
     if (!m) return new Date(NaN);
     var h = +(m[4] || 0), mi = +(m[5] || 0), se = +(m[6] || 0), ap = (m[7] || "").toLowerCase(), z = (m[8] || "").toLowerCase();
     if (ap === "pm" && h < 12) h += 12; if (ap === "am" && h === 12) h = 0;
@@ -190,15 +191,23 @@
     else { var o = z.match(/^([+-])(\d{1,2}):?(\d{2})$/); if (!o) return new Date(NaN); off = (o[1] === "-" ? -1 : 1) * (+o[2] * 60 + +o[3]); }
     return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], h, mi, se) - off * 6e4);
   }
+  /* Calendar difference (years, months, days, then clock time) between two moments, a before b. */
+  function calDiff(a, b) {
+    var y = b.getFullYear() - a.getFullYear(), mo = b.getMonth() - a.getMonth();
+    var anchor = function (yy, mm) { var t = new Date(a.getTime()); t.setFullYear(a.getFullYear() + yy, a.getMonth() + mm, 1); var last = new Date(t.getFullYear(), t.getMonth() + 1, 0).getDate(); t.setDate(Math.min(a.getDate(), last)); return t; };
+    var total = y * 12 + mo, t = anchor(0, total);
+    if (t > b) { total--; t = anchor(0, total); }
+    var ms = b - t, d = Math.floor(ms / 864e5);
+    return { y: Math.floor(total / 12), mo: total % 12, d: d, h: Math.floor(ms % 864e5 / 36e5), mi: Math.floor(ms % 36e5 / 6e4), s: Math.floor(ms % 6e4 / 1e3) };
+  }
   function countdown(c) {
     var d = parse(c, "countdown"), when = when_(d.lines[0] || ""), box = el("div", "mh-play mh-cd"), out = el("code", "mh-cd-n");
     box.appendChild(el("span", "", esc(d.title || "countdown"))); box.appendChild(out);
     function tick() {
       if (isNaN(when.getTime())) { out.textContent = "use a date like 2026-12-25 or 2000-06-11 1:26pm GMT"; return; }
-      var ms = when - new Date(), sign = ms < 0 ? "T+ " : "T- "; ms = Math.abs(ms);
-      var dd = Math.floor(ms / 864e5), hh = Math.floor(ms % 864e5 / 36e5), mm = Math.floor(ms % 36e5 / 6e4), ss = Math.floor(ms % 6e4 / 1e3);
-      var yy = Math.floor(dd / 365.2425), rd = Math.floor(dd - yy * 365.2425);
-      out.textContent = sign + (yy ? yy + "y " + rd + "d " : dd + "d ") + ("0" + hh).slice(-2) + "h " + ("0" + mm).slice(-2) + "m " + ("0" + ss).slice(-2) + "s";
+      var now = new Date(), past = when < now, sign = past ? "T+ " : "T- ";
+      var p = calDiff(past ? when : now, past ? now : when), two = function (n) { return ("0" + n).slice(-2); };
+      out.textContent = sign + (p.y ? p.y + "y " : "") + (p.y || p.mo ? p.mo + "mo " : "") + p.d + "d " + two(p.h) + "h " + two(p.mi) + "m " + two(p.s) + "s";
     }
     tick(); setInterval(tick, 1000); swap(c, box);
   }
