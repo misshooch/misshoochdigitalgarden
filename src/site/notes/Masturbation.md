@@ -11,5 +11,5 @@ I am also curious about the difference between pleasure and compulsion. At what 
 
 Perhaps I am simply very easily moved. By music, by language, by thought, by my own imagination. It seems rather ridiculous that I should be able to think myself into an orgasm, but there we are! I suppose I am interested in whether this is an excess of sexuality or an excess of sensitivity. And whether the two are really so different.
 
-I started at age 7 and in the time between then and now found myself to get very quick with it. I suppose, I will often use it as a means of emotional regulation. It does warrant some caution though, I do need to be careful to not 
+I started at age 7 and in the time between then and now found myself to get very quick with it. I suppose, I will often use it as a means of emotional regulation. It does warrant some caution though, I do need to be careful not to condition myself to certain, things, thoughts or states of mind. Currently, the thought of putting my fingers in another's mouth and them putting their's in mine is pretty compelling material. 
 TBC
