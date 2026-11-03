@@ -16,10 +16,3 @@
 
 >[!countdown] Time Since Birth  11/06/2000 1:26pm
 >2000-06-11 1:26pm
-
->[!oracle]ask me 
-> 4 help 
-> anything 
-> another time
-> 
-
