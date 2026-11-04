@@ -8,7 +8,7 @@
 
 # [[Body Composition \|Body Composition ]]
 
-# [[Average Steps (monthly)\|Average Steps (monthly)]]
+# [[Average Steps\|Average Steps]]
 
 # [[Approx. Calories Burned \|Approx. Calories Burned ]]
 
