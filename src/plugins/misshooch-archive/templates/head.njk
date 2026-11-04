@@ -14,5 +14,10 @@
 <script>
   /* Vercel Web Analytics: private page-view stats, viewed in the Vercel dashboard. */
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  /* ?notme stops this browser being counted (hit counter and analytics); ?countme undoes it. */
+  try {
+    if (/[?&]notme\b/.test(location.search)) { localStorage.setItem("mh-notme", "1"); localStorage.setItem("va-disable", "true"); }
+    if (/[?&]countme\b/.test(location.search)) { localStorage.removeItem("mh-notme"); localStorage.removeItem("va-disable"); }
+  } catch (e) {}
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
