@@ -1,0 +1,18 @@
+/* Miss Hooch Archive: geometry, topology and polymath tools */
+.mh-cv canvas { display: block; width: 100%; max-width: 560px; height: auto; border: 1px solid var(--mh-line); background: #000; }
+html[data-skin="cyber"] .mh-cv canvas { background: #06163a; border-radius: 12px; border: 2px solid #fff; outline: 1px solid #8fb0e6; }
+.mh-cv-cap { font: 12px/1.5 var(--mh-mono); color: var(--mh-dim); margin: .5em 0 0; max-width: 560px; }
+.mh-pascal canvas, .mh-collatz canvas { max-width: 640px; }
+.mh-num, .mh-gem { border: 1px solid var(--mh-line); background: var(--mh-panel); padding: 10px 14px; max-width: 520px; }
+.mh-num dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; font-size: 13px; }
+.mh-num dt { color: var(--mh-dim); letter-spacing: .06em; } .mh-num dd { margin: 0; color: var(--mh-fg); overflow-wrap: anywhere; }
+.mh-gem-h { font: 11px var(--mh-mono); letter-spacing: .14em; color: var(--mh-accent); text-transform: uppercase; margin-bottom: 6px; } .mh-gem-h small { color: var(--mh-dim); letter-spacing: .04em; margin-left: 6px; text-transform: none; }
+.mh-gem-l { margin: .3em 0; font-family: var(--mh-read); font-size: 1.1em; } .mh-gem sub { font: 10px var(--mh-mono); color: var(--mh-accent); margin-left: 1px; }
+.mh-gem-s { font: 12px var(--mh-mono); color: var(--mh-dim); } .mh-gem-t { margin: .6em 0 0; font: 13px var(--mh-mono); color: var(--mh-accent); border-top: 1px dotted var(--mh-line); padding-top: 6px; }
+.mh-tl { border-left: 2px solid var(--mh-line); padding-left: 0; margin-left: 6px; }
+.mh-tl-i { display: grid; grid-template-columns: 5.5em 18px 1fr; align-items: baseline; gap: 0 4px; margin: .5em 0 .5em -9px; }
+.mh-tl-y { text-align: right; font: 13px var(--mh-mono); color: var(--mh-accent); padding-right: 8px; }
+.mh-tl-d { width: 10px; height: 10px; border-radius: 50%; background: var(--mh-accent); box-shadow: var(--mh-glow); align-self: center; }
+.mh-tl-t { font-family: var(--mh-read); }
+html[data-skin="cyber"] .mh-num, html[data-skin="cyber"] .mh-gem { border: 2px solid #fff; outline: 1px solid #8fb0e6; border-radius: 14px; background: linear-gradient(#fff, #dbe8ff); color: #0b2a6b; }
+html[data-skin="cyber"] .mh-num dd, html[data-skin="cyber"] .mh-gem-l { color: #0b2a6b; } html[data-skin="cyber"] .mh-num dt, html[data-skin="cyber"] .mh-gem-s { color: #3a64b8; }
