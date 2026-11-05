@@ -134,7 +134,6 @@
       row.innerHTML = '<span class="mh-fp-n" title="words in this line / the Fibonacci number for this line">' + words + "/" + want + '</span><span class="mh-fp-l">' + esc(l) + "</span>";
       box.appendChild(row);
     });
-    box.appendChild(el("p", "mh-play-hint", "Each line is counted. Green means it has exactly the Fibonacci number of words."));
     swap(c, box);
   }
 
