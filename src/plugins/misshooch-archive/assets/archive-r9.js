@@ -23,6 +23,8 @@
   function $(s, r) { return (r || doc).querySelector(s); }
   function $$(s, r) { return Array.prototype.slice.call((r || doc).querySelectorAll(s)); }
   function safe(name, fn) { try { fn(); } catch (e) { if (window.console) console.warn("[misshooch-archive] " + name + " skipped:", e); } }
+  var bound = {};
+  function onDoc(key, type, fn) { if (bound[key]) return; bound[key] = 1; doc.addEventListener(type, fn); }
   function store(k, v) { try { if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -241,7 +243,7 @@
       };
       if (img.complete && img.naturalWidth) go(); else img.addEventListener("load", go, { once: true });
     });
-    doc.addEventListener("mh-skin", function () { skinFxList.forEach(drawSkinFx); });
+    onDoc("skinfx", "mh-skin", function () { skinFxList.forEach(drawSkinFx); });
   }
 
   /* ---------- skin + calm ---------- */
@@ -249,17 +251,20 @@
     var btns = $$("[data-mh-skin]"), calm = $$("[data-mh-calm]");
     function paint() {
       var cyber = root.getAttribute("data-skin") === "cyber", c = root.hasAttribute("data-calm");
-      btns.forEach(function (b) { b.textContent = "skin: " + (cyber ? "cyber blue" : "terminal"); b.setAttribute("aria-pressed", cyber ? "true" : "false"); });
-      calm.forEach(function (b) { b.textContent = "calm: " + (c ? "on" : "off"); b.setAttribute("aria-pressed", c ? "true" : "false"); });
+      $$("[data-mh-skin]").forEach(function (b) { b.textContent = "skin: " + (cyber ? "cyber blue" : "terminal"); b.setAttribute("aria-pressed", cyber ? "true" : "false"); });
+      $$("[data-mh-calm]").forEach(function (b) { b.textContent = "calm: " + (c ? "on" : "off"); b.setAttribute("aria-pressed", c ? "true" : "false"); });
     }
-    btns.forEach(function (b) {
+    // buttons already wired up (the status bar stays when pages are swapped) are only repainted
+    var fresh = function (b) { if (b.getAttribute("data-mh-bound")) return false; b.setAttribute("data-mh-bound", "1"); return true; };
+    var newBtns = btns.filter(fresh), newCalm = calm.filter(fresh);
+    newBtns.forEach(function (b) {
       b.addEventListener("click", function () {
         if (root.getAttribute("data-skin") === "cyber") { root.removeAttribute("data-skin"); store("mh-skin", null); }
         else { root.setAttribute("data-skin", "cyber"); store("mh-skin", "cyber"); }
         paint(); doc.dispatchEvent(new Event("mh-skin"));
       });
     });
-    calm.forEach(function (b) {
+    newCalm.forEach(function (b) {
       b.addEventListener("click", function () {
         if (root.hasAttribute("data-calm")) { root.removeAttribute("data-calm"); store("mh-calm", null); }
         else { root.setAttribute("data-calm", "1"); store("mh-calm", "1"); }
@@ -459,13 +464,13 @@
     var site = (($(".mh-idh span") || {}).textContent || "MISSHOOCH").toUpperCase();
     bios.innerHTML = "<span>MR BIOS (TM)</span><span>COPYRIGHT " + site + " " + new Date().getFullYear() + "</span><span>RESEARCH</span><span>VER 1.03</span><span data-mh-tc>00:00:00:00</span>";
     h1.parentNode.insertBefore(bios, h1);
-    setInterval(function () { var t = new Date(); var p2 = function (x) { return ("0" + x).slice(-2); }; var el = $("[data-mh-tc]"); if (el) el.textContent = p2(t.getHours()) + ":" + p2(t.getMinutes()) + ":" + p2(t.getSeconds()) + ":" + p2(Math.floor(t.getMilliseconds() / 10)); }, 1000);
+    if (!bound.bios) bound.bios = setInterval(function () { var t = new Date(); var p2 = function (x) { return ("0" + x).slice(-2); }; var el = $("[data-mh-tc]"); if (el) el.textContent = p2(t.getHours()) + ":" + p2(t.getMinutes()) + ":" + p2(t.getSeconds()) + ":" + p2(Math.floor(t.getMilliseconds() / 10)); }, 1000);
     var oldest = $$(".mh-latest li a").pop(), st = $("[data-mh-start]");
     if (oldest && st) st.setAttribute("href", oldest.getAttribute("href"));
     h1.parentNode.insertBefore(box, h1.nextSibling);
-    doc.addEventListener("mh-skin", function () { var m = $("[data-mh-mode]"); if (m) m.textContent = "> mode: " + mode(); });
+    onDoc("bootmode", "mh-skin", function () { var m = $("[data-mh-mode]"); if (m) m.textContent = "> mode: " + mode(); });
     // press / to search, click portrait to cycle photos
-    doc.addEventListener("keydown", function (e) {
+    onDoc("slash", "keydown", function (e) {
       var t = e.target && e.target.tagName;
       if (e.key === "/" && t !== "INPUT" && t !== "TEXTAREA" && typeof window.toggleSearch === "function") { e.preventDefault(); window.toggleSearch(); }
     });
@@ -551,5 +556,12 @@
     safe("skin", setupSkin); safe("clock", setupClock); safe("misc", setupMisc); safe("boot", setupBoot);
     safe("sidenotes", setupSidenotes); safe("player", setupPlayer); safe("skin images", setupSkinFx); safe("photo effects", setupFx); win_load(function () { safe("photo effects", setupFx); }); safe("gallery", setupGallery);
   }
+  // A new page was swapped in while music plays (nav-r1.js): redo the parts that belong to the page.
+  // The clock and the player live in the status bar, which stays put.
+  function page() {
+    safe("skin", setupSkin); safe("misc", setupMisc); safe("boot", setupBoot); safe("sidenotes", setupSidenotes);
+    safe("skin images", setupSkinFx); safe("photo effects", setupFx); safe("gallery", setupGallery);
+  }
+  doc.addEventListener("mh-page", page);
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
 })();

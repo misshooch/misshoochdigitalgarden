@@ -38,13 +38,14 @@
     me = localStorage.getItem("mh-notme") === "1";
   } catch (e) {}
 
+  function count() {
   var path = location.pathname || "/";
   var seenKey = "mh-hit:" + path, seen = false;
   try { seen = sessionStorage.getItem(seenKey) === "1"; } catch (e) {}
 
   var newVisit = false;
   try { newVisit = sessionStorage.getItem("mh-visit") !== "1"; } catch (e) {}
-  draw(null);
+  if (box.hidden) draw(null);
   fetch("/api/hits?path=" + encodeURIComponent(path) + (newVisit && !me ? "&visit=1" : ""), { method: me || (seen && !newVisit) ? "GET" : "POST", keepalive: true })
     .then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (d) {
@@ -56,4 +57,7 @@
       try { sessionStorage.setItem(seenKey, "1"); sessionStorage.setItem("mh-visit", "1"); } catch (e) {}
     })
     .catch(function () {});
+  }
+  count();
+  document.addEventListener("mh-page", count); // a new page was swapped in while music plays (nav-r1.js)
 })();
