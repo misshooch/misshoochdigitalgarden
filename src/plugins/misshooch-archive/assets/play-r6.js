@@ -230,7 +230,8 @@
       if (!fn) return;
       try { fn(c); } catch (e) { if (window.console) console.warn("[misshooch play] " + type + " skipped:", e); }
     });
-    doc.addEventListener("mh-skin", function () { spirals.forEach(function (s) { drawSpiral(s[0], s[1]); }); });
   }
+  doc.addEventListener("mh-skin", function () { spirals.forEach(function (s) { drawSpiral(s[0], s[1]); }); });
+  doc.addEventListener("mh-page", start); // a new page was swapped in while music plays (nav-r1.js)
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
 })();

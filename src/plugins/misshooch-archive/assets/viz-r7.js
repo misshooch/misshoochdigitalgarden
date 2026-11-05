@@ -190,4 +190,5 @@
   }
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", setup); else setup();
   window.addEventListener("load", setup);
+  doc.addEventListener("mh-page", setup); // a new page was swapped in while music plays (nav-r1.js)
 })();

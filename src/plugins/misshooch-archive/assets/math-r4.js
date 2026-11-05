@@ -241,7 +241,8 @@
       if (!fn) return;
       try { fn(c); } catch (e) { if (window.console) console.warn("[misshooch math] " + type + " skipped:", e); }
     });
-    doc.addEventListener("mh-skin", function () { redraws.forEach(function (r) { try { r(); } catch (e) {} }); });
   }
+  doc.addEventListener("mh-skin", function () { redraws.forEach(function (r) { try { r(); } catch (e) {} }); });
+  doc.addEventListener("mh-page", start); // a new page was swapped in while music plays (nav-r1.js)
   if (doc.readyState === "loading") doc.addEventListener("DOMContentLoaded", start); else start();
 })();
