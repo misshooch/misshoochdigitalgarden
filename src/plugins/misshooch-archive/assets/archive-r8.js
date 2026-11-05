@@ -314,6 +314,18 @@
     // 2. audio embedded or linked in the current note
     $$(".cm-s-obsidian audio").forEach(function (a) { add(a.currentSrc || a.getAttribute("src") || ($("source", a) && $("source", a).src)); });
     $$(".cm-s-obsidian a[href]").forEach(function (a) { if (/\.(mp3|m4a|ogg|wav|flac)(\?.*)?$/i.test(a.getAttribute("href"))) add(a.href, a.textContent.trim()); });
+    // Always on shuffle: a fresh random order for each visit, kept while moving between pages.
+    if (tracks.length > 1) {
+      var order = null, sig = tracks.map(function (t) { return t.src; }).sort().join("\n");
+      try { var o = JSON.parse(sessionStorage.getItem("mh-shuffle") || "null"); if (o && o.sig === sig) order = o.order; } catch (e) {}
+      if (!order) {
+        order = tracks.map(function (t) { return t.src; });
+        for (var si = order.length - 1; si > 0; si--) { var sj = Math.floor(Math.random() * (si + 1)), tmp = order[si]; order[si] = order[sj]; order[sj] = tmp; }
+        try { sessionStorage.setItem("mh-shuffle", JSON.stringify({ sig: sig, order: order })); } catch (e) {}
+      }
+      var bySrc = {}; tracks.forEach(function (t) { bySrc[t.src] = t; });
+      tracks = order.map(function (src) { return bySrc[src]; }).filter(Boolean);
+    }
     // 3. nothing to play: a generated ambient track so the player always works
     if (!tracks.length) tracks.push({ gen: true, title: "ambient_demo (generated)" });
 
