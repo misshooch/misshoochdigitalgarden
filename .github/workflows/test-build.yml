@@ -1,0 +1,22 @@
+name: test-build
+on:
+  push:
+    branches: [ci/test-build]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build
+      - run: |
+          cd dist
+          git init -q -b out
+          git -c user.name=ci -c user.email=ci@example.invalid add -A
+          git -c user.name=ci -c user.email=ci@example.invalid commit -qm "built site"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" out:ci/test-build-out
