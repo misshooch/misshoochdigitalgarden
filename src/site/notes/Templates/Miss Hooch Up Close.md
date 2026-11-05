@@ -11,10 +11,21 @@ The month is November - you can find the music you're listening to here: [[Novem
 
 >enjoy, slayers <3
 
-> [!fibpoem] poem
+> [!fibpoem] fib poem
+> today,  
+> yesterday,  
+> the same,  
+> again and again.  
+> I wait and wait, but still it remains  
+> the same. Then tomorrow arrives, and everything changes!  
+> How strange! How insane! The world looks the same, yet nothing feels quite as it did.  
+> The air is clear, the walls remain, the light falls softly on the windowpane,  
+> yet something has shifted, something unseen, as though the days were layered in between.  
+> I reach my hand through the calendar's face, and find another day suspended in the very same space,  
+> its atoms arranged, its hours estranged, yesterday beneath it, tomorrow above, and not a single thing changed.
 
 
 
 
->[!fibonacci] 49
+>[!fibonacci] 21
 
