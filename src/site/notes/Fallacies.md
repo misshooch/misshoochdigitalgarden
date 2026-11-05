@@ -5,7 +5,7 @@
 >[!Note] Disclaimer: 
 > This has been under 'construction' for 6 months. This is how I build my essays. I will edit this. And then publish it here and on substack! Always happy to hear suggestions, holes in my arguments or any further research! I always feel I have to qualify as I am self-taught in many realms. 
 > 
-> 
+
 
 
 >I have a timer to tidy my room. 10 minutes a day. Somehow I use it all up, which amazes me as I hardly get out of bed - yet I’m always in filth. There’s some gravlax in my throat - from a chocolate bar that I had for lunch. Girlhood? There’s a lot of hurdles over here. I don’t think I am in a very tenacious season. I apply for about 5 jobs a day. Then usually wank for a few hours, what else is there to do if you have no money and no friends? I could get out more. I don’t desire to. Everything feels rather staged for my liking. The outside world, the people in it. I feel most comfortable at the moment backstage; in my room. There isn’t really anything clear in front of me, I feel exhausted all the time. I know it’s because I don’t do much anymore. I usually eat well. Drink 4 cups of black coffee a day. I’ve cut my smoking down to around 5 from 20. I try and read. I like to think I’m a reader but I actually hardly read. I mostly stare at the white walls and make up scenarios in my head; me with power, me with a voice, me with love, me with a 4x4 truck. I have an infinity for semicolons at the moment. I have an affinity for autological words. I read a book about the rules of rhetoric and told myself I would implement it in my life. I didn’t. Maybe I’ll try. 
