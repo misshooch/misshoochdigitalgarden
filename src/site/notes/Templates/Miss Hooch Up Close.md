@@ -19,7 +19,7 @@ The month is November - you can find the music you're listening to here: [[Novem
 > I wait and wait, unchanged.  
 > tomorrow, check my watch. Where's the promised transformation?
 > How strange! How insane! The world looks the same, yet feels entirely rearranged.  
-> The air is clear, the walls contain, light falls softly on the windowpane, yet something has shifted, it's hard to explain.  
+> The air is clear, the walls contain, light falls softly on the windowpane, and something has shifted, it's hard to explain.  
 > So then, I reach my hand through the calendar's face only to discover another date suspended in the very same space, its atoms arranged, its hours estranged, a year ago today?! does nothing remain?
 
 
