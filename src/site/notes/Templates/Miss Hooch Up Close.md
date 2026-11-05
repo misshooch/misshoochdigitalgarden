@@ -24,6 +24,5 @@ The month is November - you can find the music you're listening to here: [[Novem
 
 
 
-
 >[!fibonacci] 36
 
