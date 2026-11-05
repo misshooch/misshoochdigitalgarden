@@ -4,7 +4,6 @@
 
 Welcome! To MissHooch #UpClose my digital embodiment. Inspired by Justin Hall of [Links from the Underground](https://www.links.net/vita/web/start/) i endeavour to satirise the //[[Body of Work/transhumanists\|transhumanists]]//   online. I feel called to do so. plus, it will be good practice for my literacy, humour and humiliation threshold.  This will be my greatest /[[Body of Work/body\|body]]/ of work to date!
 
-[[hooch?\|hooch?]]
 
 The month is November - you can find the music you're listening to here: [[November Music\|November Music]] 
 >At the side, you'll be able to see my  [Daily Entry](https://www.misshooch.com/sections/daily-entry/) with [other essays](https://www.misshooch.com/sections/other-essays/), and [things of interest](https://www.misshooch.com/sections/things-of-interest/)!
