@@ -20,7 +20,7 @@ The month is November - you can find the music you're listening to here: [[Novem
 > The same. Then tomorrow arrives, and everything changes!  
 > How strange! How insane! The world looks the same, yet feels entirely rearranged.  
 > The air is clear, the walls remain, the light falls softly on the windowpane, yet something has shifted, it's something deranged.  
-> I reach my hand through the calendar's face only to discover another date suspended in the very same space, its atoms arranged, its hours estranged, a year ago today?! nothing to remain
+> I reach my hand through the calendar's face only to discover another date suspended in the very same space, its atoms arranged, its hours estranged, a year ago today?! does nothing remain?
 
 
 
