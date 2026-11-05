@@ -3,7 +3,7 @@
   <span class="mh-lab">sections</span>
   <ul>
     {% for s in archiveSections %}
-      {% set href = "/sections/" + s.slug + "/" %}
+      {% set href = s.href or ("/sections/" + s.slug + "/") %}
       <li><a class="{{ 'is-here' if page.url == href }}" href="{{ href }}">{{ s.name }}</a></li>
     {% endfor %}
   </ul>

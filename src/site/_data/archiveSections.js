@@ -6,6 +6,9 @@ const path = require("path");
 // into it, and its section page appears on its own.
 // The names below always get a page, even before anything is published into them.
 const ALWAYS = ["Daily Entry", "Other Essays", "Things of Interest"];
+// Shown last in the list and linking to the media page (every photograph) instead of a folder page.
+const MEDIA = { name: "Media", folder: "", slug: "media", href: "/media/" };
+const HIDDEN = ["photos", "media"];
 const NOTES = path.join(__dirname, "..", "notes");
 
 function slug(name) {
@@ -19,6 +22,7 @@ module.exports = function () {
   } catch (e) {}
   const names = [...ALWAYS];
   for (const f of folders.sort((a, b) => a.localeCompare(b))) {
+    if (HIDDEN.includes(f.toLowerCase())) continue;
     if (!names.some((n) => n.toLowerCase() === f.toLowerCase())) names.push(f);
   }
   const seen = new Set();
@@ -27,5 +31,6 @@ module.exports = function () {
       const folder = folders.find((f) => f.toLowerCase() === name.toLowerCase()) || name;
       return { name, folder, slug: slug(name) };
     })
-    .filter((s) => (seen.has(s.slug) ? false : seen.add(s.slug)));
+    .filter((s) => (seen.has(s.slug) ? false : seen.add(s.slug)))
+    .concat([MEDIA]);
 };

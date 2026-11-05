@@ -19,6 +19,8 @@ module.exports = {
   layout: "layouts/index.njk",
   eleventyExcludeFromCollections: true,
   isSectionPage: true,
+  // Entries that link elsewhere (Media goes to /media/) don't get a page of their own.
+  permalink: (data) => (data.section && data.section.href ? false : `/sections/${data.section.slug}/`),
   eleventyComputed: {
     title: (data) => (data.section ? data.section.name : "Section"),
     settings: () => {

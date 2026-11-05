@@ -4,6 +4,7 @@
     "buildCommand": "npm run build",
     "devCommand": "npm run start",
     "routes": [
+        { "src": "/photos/?", "status": 301, "headers": { "Location": "/media/" } },
         { "handle": "filesystem" },
         { "src": "/(.*)", "status": 404, "dest": "/404" }
       ]

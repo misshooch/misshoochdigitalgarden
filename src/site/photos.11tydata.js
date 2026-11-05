@@ -2,7 +2,7 @@ require("dotenv").config();
 const settings = require("../helpers/constants");
 const pluginLoader = require("../helpers/pluginLoader");
 
-// The photos page (/photos/): every photograph as uploaded and in each effect.
+// The media page (/media/, was /photos/): every photograph as uploaded and in each effect.
 // Like the A-Z page it reuses the index layout with the listing defaults: no
 // sidebar panels, settings from the environment.
 const allSettings = [
@@ -15,7 +15,7 @@ module.exports = {
   eleventyExcludeFromCollections: true,
   isPhotosPage: true,
   eleventyComputed: {
-    title: () => "Photos",
+    title: () => "Media",
     settings: () => {
       const noteSettings = {};
       allSettings.forEach((setting) => {
