@@ -70,7 +70,6 @@
 | 61  | Surf Rider                                      | The Lively Ones                                      | Surf Rock, Instrumental Rock                              |
 | 62  | Switch Up                                       | Mike D                                               | Hip-Hop, Rap                                              |
 | 63  | The Road Back Home                              | F.J. McMahon                                         | Psychedelic Folk, Acid Folk, Singer-Songwriter            |
-| 64  | The Road Back Home (second copy)                | F.J. McMahon                                         | Psychedelic Folk, Acid Folk, Singer-Songwriter            |
 | 65  | This Bitter Earth                               | Dinah Washington                                     | Jazz, Soul, Vocal Jazz                                    |
 | 66  | This Is the World                               | Eola                                                 | Experimental Pop, Lo-Fi, Ambient                          |
 | 67  | Top of Cars                                     | Lil M.U.                                             | Footwork                                                  |
