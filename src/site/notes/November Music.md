@@ -10,7 +10,7 @@
 | 1   | And I Know                                      | Eola                                                 | Experimental Pop, Lo-Fi, Ambient                          |
 | 2   | B and O Blues                                   | Eola                                                 | Experimental Pop, Lo-Fi, Ambient                          |
 | 3   | Bass Boss                                       | Amadeezy                                             | Ghettotech, Electro, Booty Bass                           |
-| 4   | Before the Beginning                            | Fleetwood Mac / Peter Green                          | Blues Rock, Psychedelic Rock                              |
+| 4   | Before the Beginning                            | John Frusciante                                      | Blues Rock, Psychedelic Rock                              |
 | 5   | Big Chestined Nights                            | Eola                                                 | Experimental Pop, Lo-Fi, Ambient                          |
 | 6   | Blue Vein                                       | Lael Neale                                           | Indie Folk, Psychedelic Folk                              |
 | 7   | Bleu Sous-Marin                                 | Flavien Berger                                       | Experimental Electronic, Synth-Pop, Psychedelic Pop       |
