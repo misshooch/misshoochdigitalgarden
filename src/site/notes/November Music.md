@@ -18,7 +18,7 @@
 | 9   | Caoine                                          | RÓIS                                                 | Experimental Folk, Irish Traditional, Avant-Folk          |
 | 10  | Caravan                                         | Buddy Rich                                           | Big Band Jazz, Swing                                      |
 | 11  | Cement Shoes                                    | DJ Spanish Fly                                       | Memphis Rap, Underground Hip-Hop, Lo-Fi Hip-Hop           |
-| 12  | Cold Was the Ground                             | Blind Willie Johnson                                 | Gospel Blues, Delta Blues,                                |
+| 12  | Cold Was the Ground                             | The Liminanas                                        | Space Rock, Neo-psychedelic                               |
 | 13  | Colapso                                         | RHR                                                  | Experimental Electronic, Bass Music, Brazilian Electronic |
 | 14  | Couldn't Catch My Breath (feat. Harriet Brown)  | DJ Houseplants                                       | Deep House, Lo-Fi House, Electronic                       |
 | 15  | Daylong Breathing                               | Eola                                                 | Experimental Pop, Lo-Fi, Ambient                          |
