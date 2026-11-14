@@ -6,7 +6,9 @@
 
 | Start Date | End Date | Average Daily Steps | Total Steps | Total Distance (miles) |
 | ---------- | -------- | ------------------- | ----------- | ---------------------- |
-| 30/10/26   | 04/11/26 | 12957               | 77,7742     | 38.6                   |
+| 09/11/26   | 15/11/26 | 12468 (incomplete)  | 74871       | 37.1                   |
+| 02/11/26   | 08/11/26 | 14483               | 101381      | 50.2                   |
+
 
 
 | Start Date | End Date   | Total Steps | Average Daily Steps | Average Weekly Steps | Total Distance (miles) |
