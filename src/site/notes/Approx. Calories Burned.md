@@ -5,9 +5,9 @@
 
 | Start Date | End Date | Avg Active kcal/day | Avg Resting kcal/day | Avg Total kcal/day |
 | ---------- | -------- | ------------------- | -------------------- | ------------------ |
-| 29/10/26   | 04/11/26 | 788                 | 1433                 | 2221               |
-|            |          |                     |                      |                    |
-^Present weekly 
+| 09/11/26   | 15/11/26 | 712                 | 1433                 | 2145               |
+| 02/11/26   | 08/11/26 | 739                 | 1433                 | 2172               |
+
 
 | Start Date | End Date   | Avg Active kcal/day | Avg Resting kcal/day | Avg Total kcal/day |
 | ---------- | ---------- | ------------------- | -------------------- | ------------------ |
