@@ -5,7 +5,8 @@
 
 | Start Date | End Date | Avg Sleep Duration (h:mm) | Avg Sleep Score | Avg Resting HR (bpm) | Avg Body Battery Gain | Avg SpO2 (%) | Avg respiration |
 | ---------- | -------- | ------------------------- | --------------- | -------------------- | --------------------- | ------------ | --------------- |
-| 30/10/26   | 04/11/26 | 7:24                      | 80              | 52                   | 65                    | 95           | 13 brpm         |
+| 09/11/26   | 15/11/26 | 7:48                      | 84              | 51                   | 77                    | N/a          | 13brpm          |
+| 02/11/26   | 08/11/26 | 7:02                      | 78              | 51                   | 67                    | 96           | 13 brpm         |
 
 | Start Date | End Date   | Avg Sleep Duration (h:mm) | Avg Sleep Score | Avg Resting HR (bpm) | Avg Body Battery Gain | Avg SpO2 (%) |
 | ---------- | ---------- | ------------------------- | --------------- | -------------------- | --------------------- | ------------ |
