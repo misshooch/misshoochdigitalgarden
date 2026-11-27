@@ -1,0 +1,56 @@
+# Photo privacy: whenever photos are published (from Obsidian or anywhere
+# else), remove their location (GPS) and camera metadata and commit the
+# cleaned files back. The live site is also cleaned during every build, so a
+# photo is never served with its location even before this finishes.
+# Script: src/helpers/stripImageMetadata.js (no install needed).
+name: Strip photo metadata
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/site/**.jpg"
+      - "src/site/**.jpeg"
+      - "src/site/**.JPG"
+      - "src/site/**.JPEG"
+      - "src/site/**.jfif"
+      - "src/site/**.png"
+      - "src/site/**.PNG"
+      - "src/site/**.webp"
+      - "src/site/**.heic"
+      - "src/site/**.HEIC"
+      - "src/site/**.heif"
+      - "src/site/**.avif"
+      - "src/site/**.tif"
+      - "src/site/**.tiff"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: strip-photo-metadata
+  cancel-in-progress: false
+
+jobs:
+  strip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Remove location and camera data from photos
+        run: node src/helpers/stripImageMetadata.js src/site
+      - name: Commit cleaned photos
+        run: |
+          if git diff --quiet; then
+            echo "No photos needed cleaning."
+            exit 0
+          fi
+          git config user.name "photo-privacy-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A src/site
+          git commit -m "Remove location data from photos"
+          git pull --rebase origin main
+          git push

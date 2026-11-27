@@ -4,6 +4,24 @@
     "buildCommand": "npm run build",
     "devCommand": "npm run start",
     "routes": [
+        {
+            "src": "/(.*)",
+            "headers": {
+                "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
+                "X-Content-Type-Options": "nosniff",
+                "X-Frame-Options": "SAMEORIGIN",
+                "Referrer-Policy": "strict-origin-when-cross-origin",
+                "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+                "Cross-Origin-Opener-Policy": "same-origin",
+                "Content-Security-Policy": "frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+            },
+            "continue": true
+        },
+        {
+            "src": "/api/(.*)",
+            "headers": { "X-Robots-Tag": "noindex" },
+            "continue": true
+        },
         { "src": "/photos/?", "status": 301, "headers": { "Location": "/media/" } },
         { "handle": "filesystem" },
         { "src": "/(.*)", "status": 404, "dest": "/404" }

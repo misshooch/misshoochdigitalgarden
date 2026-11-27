@@ -115,6 +115,7 @@ const { basesPlugin } = require("./src/helpers/basesPlugin");
 
 const Image = require("@11ty/eleventy-img");
 const { isDecodableImage } = require("./src/helpers/imageFormat.js");
+const { stripDirectory } = require("./src/helpers/stripImageMetadata.js");
 
 // Build containers have few CPUs and little memory; the default queue
 // concurrency of 10 holds ~10 decoded images in memory at once without
@@ -860,6 +861,10 @@ module.exports = function(eleventyConfig) {
       console.log(`[image] Image optimization complete`);
       pendingImageJobs.length = 0;
     }
+    // Photo privacy: wipe location and camera metadata from every image that
+    // goes live, including originals copied straight from src/site/img.
+    const cleaned = stripDirectory("dist");
+    if (cleaned.length) console.log(`[photo privacy] Removed metadata from ${cleaned.length} image(s)`);
   });
   eleventyConfig.addWatchTarget(FAVICON_SOURCE);
   eleventyConfig.addPlugin(faviconsPlugin, { outputDir: "dist" });
